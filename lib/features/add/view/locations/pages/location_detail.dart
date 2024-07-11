@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:travio_admin_/features/add/view/locations/pages/add_details_page.dart';
 import 'package:travio_admin_/features/add/view/locations/widgets/detail_card.dart';
 
 class LocationDetails extends StatelessWidget {
@@ -14,7 +15,10 @@ class LocationDetails extends StatelessWidget {
         backgroundColor: Colors.purple.shade200,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+
+          Navigator.push(context, MaterialPageRoute(builder: (context) => AddPlacePage(),));
+        },
         child: Icon(Icons.add),
         backgroundColor: Colors.purple.shade200,
       ),
