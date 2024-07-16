@@ -1,8 +1,6 @@
-// import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:travio_admin_/features/add/controller/place_provider.dart';
-// import 'place_provider.dart';
 
 class AddPlacePage extends StatelessWidget {
   @override
@@ -65,7 +63,10 @@ class AddPlacePage extends StatelessWidget {
               ),
               SizedBox(height: 16.0),
               ElevatedButton(
-                onPressed: placeProvider.submitForm,
+                onPressed: () async {
+                  await placeProvider.submitForm();
+                  Navigator.pop(context); // Go back to the previous page
+                },
                 child: Text('Submit'),
               ),
             ],

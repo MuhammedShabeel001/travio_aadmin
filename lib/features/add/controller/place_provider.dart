@@ -1,10 +1,16 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:travio_admin_/features/add/model/place_model.dart';
 
 class PlaceProvider with ChangeNotifier {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore db = FirebaseFirestore.instance;
+
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _activitiesController = TextEditingController();
@@ -15,6 +21,12 @@ class PlaceProvider with ChangeNotifier {
   TextEditingController get descriptionController => _descriptionController;
   TextEditingController get activitiesController => _activitiesController;
   List<File> get images => _images;
+
+  List<PlaceModel> _places = [];
+  List<PlaceModel> get places => _places;
+
+  PlaceModel? _place;
+  PlaceModel? get place => _place;
 
   Future<void> pickImages() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -40,7 +52,10 @@ class PlaceProvider with ChangeNotifier {
   }
 
   Future<void> submitForm() async {
-    if (_nameController.text.isNotEmpty && _descriptionController.text.isNotEmpty && _activitiesController.text.isNotEmpty && _images.isNotEmpty) {
+    if (_nameController.text.isNotEmpty &&
+        _descriptionController.text.isNotEmpty &&
+        _activitiesController.text.isNotEmpty &&
+        _images.isNotEmpty) {
       await _uploadImages();
 
       DocumentReference docRef = FirebaseFirestore.instance.collection('places').doc();
@@ -54,12 +69,29 @@ class PlaceProvider with ChangeNotifier {
         'image_urls': _uploadedImagesUrls,
       });
 
+      // Fetch the new place and add it to the list
+      DocumentSnapshot locationDoc = await docRef.get();
+      PlaceModel newPlace = PlaceModel.fromMap(locationDoc.data() as Map<String, dynamic>);
+      _places.add(newPlace);
+
       _nameController.clear();
       _descriptionController.clear();
       _activitiesController.clear();
       _images = [];
       _uploadedImagesUrls.clear();
       notifyListeners();
+    }
+  }
+
+  Future<void> fetchAllLocations() async {
+    try {
+      QuerySnapshot locationSnapshot = await db.collection('places').get();
+      _places = locationSnapshot.docs
+          .map((doc) => PlaceModel.fromMap(doc.data() as Map<String, dynamic>))
+          .toList();
+      notifyListeners();
+    } catch (e) {
+      log('Error fetching location data: $e');
     }
   }
 }

@@ -6,6 +6,7 @@ environment:
   sdk: '>=3.4.3 <4.0.0'
 dependencies:
   awesome_bottom_bar: ^1.2.4
+  carousel_slider: ^4.2.1
   cloud_firestore: ^5.1.0
   cupertino_icons: ^1.0.6
   file_picker: ^8.0.6
