@@ -15,6 +15,7 @@ dependencies:
   firebase_storage: ^12.1.1
   flutter:
     sdk: flutter
+  flutter_countries: ^1.0.2
   multiple_images_picker: ^1.0.1
   provider: ^6.1.2
 

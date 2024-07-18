@@ -53,12 +53,14 @@ class AddLocationPage extends StatelessWidget {
           Expanded(
               flex: 1,
               child: Container(
-                color: Colors.red,
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                // child: ,
+                // color: Colors.red,
               )),
           Expanded(
               flex: 1,
               child: Container(
-                color: Colors.green,
+                // color: Colors.green,
               )),
         ],
       ),

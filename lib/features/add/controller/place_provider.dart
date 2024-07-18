@@ -13,13 +13,45 @@ class PlaceProvider with ChangeNotifier {
 
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
-  final _activitiesController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String? selectedCountry;
+  String? selectedContinent;
+
+  final List<String> availableActivities = [
+    'Hiking',
+    'Swimming',
+    'Sightseeing',
+    'Shopping',
+    'Dining',
+  ];
+  List<String> selectedActivities = [];
+
   List<File> _images = [];
   final List<String> _uploadedImagesUrls = [];
 
+  List<String> countries = [
+    'United States',
+    'Canada',
+    'Mexico',
+    'India',
+    'China',
+    'Australia',
+    // Add more countries as needed
+  ];
+
+  List<String> continents = [
+    'Asia',
+    'Africa',
+    'North America',
+    'South America',
+    'Antarctica',
+    'Europe',
+    'Australia',
+  ];
+
   TextEditingController get nameController => _nameController;
   TextEditingController get descriptionController => _descriptionController;
-  TextEditingController get activitiesController => _activitiesController;
+  GlobalKey<FormState> get formKey => _formKey;
   List<File> get images => _images;
 
   List<PlaceModel> _places = [];
@@ -40,6 +72,15 @@ class PlaceProvider with ChangeNotifier {
     }
   }
 
+  void toggleActivity(String activity) {
+    if (selectedActivities.contains(activity)) {
+      selectedActivities.remove(activity);
+    } else {
+      selectedActivities.add(activity);
+    }
+    notifyListeners();
+  }
+
   Future<void> _uploadImages() async {
     for (var image in _images) {
       final fileName = DateTime.now().millisecondsSinceEpoch.toString();
@@ -54,7 +95,9 @@ class PlaceProvider with ChangeNotifier {
   Future<void> submitForm() async {
     if (_nameController.text.isNotEmpty &&
         _descriptionController.text.isNotEmpty &&
-        _activitiesController.text.isNotEmpty &&
+        selectedCountry != null &&
+        selectedContinent != null &&
+        selectedActivities.isNotEmpty &&
         _images.isNotEmpty) {
       await _uploadImages();
 
@@ -65,7 +108,9 @@ class PlaceProvider with ChangeNotifier {
         'id': placeId,
         'name': _nameController.text,
         'description': _descriptionController.text,
-        'activities': _activitiesController.text,
+        'country': selectedCountry,
+        'continent': selectedContinent,
+        'activities': selectedActivities.join(', '),
         'image_urls': _uploadedImagesUrls,
       });
 
@@ -76,7 +121,9 @@ class PlaceProvider with ChangeNotifier {
 
       _nameController.clear();
       _descriptionController.clear();
-      _activitiesController.clear();
+      selectedCountry = null;
+      selectedContinent = null;
+      selectedActivities.clear();
       _images = [];
       _uploadedImagesUrls.clear();
       notifyListeners();

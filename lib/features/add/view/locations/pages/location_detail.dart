@@ -20,13 +20,13 @@ class LocationDetails extends StatelessWidget {
       appBar: AppBar(
         title: Text('Locations'),
         centerTitle: true,
-        backgroundColor: Colors.purple.shade200,
+        backgroundColor: Colors.purple.shade200,  
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AddPlacePage()),
+            MaterialPageRoute(builder: (context) => AddDetailsPage()),
           );
         },
         child: Icon(Icons.add),

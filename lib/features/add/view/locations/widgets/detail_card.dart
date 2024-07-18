@@ -11,92 +11,90 @@ class DetailCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: Colors.purple[100],
-      child: SizedBox(
-        height: 380,
-        child: Column(
-          children: [
-            Expanded(
-              flex: 1,
-              child: CarouselSlider(
-                options: CarouselOptions(height: 200.0, autoPlay: true),
-                items: place.images.map((url) {
-                  return Builder(
-                    builder: (BuildContext context) {
-                      return ClipRRect(
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-                        child: Image.network(url, fit: BoxFit.cover, width: double.infinity),
-                      );
-                    },
-                  );
-                }).toList(),
-              ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CarouselSlider(
+            options: CarouselOptions(
+              height: 200.0,
+              autoPlay: true,
+              enlargeCenterPage: true,
+              viewportFraction: 1.0,
             ),
-            Expanded(
-              flex: 2,
-              child: Container(
-                padding: EdgeInsets.all(12),
-                child: Column(
+            items: place.images.map((url) {
+              return Builder(
+                builder: (BuildContext context) {
+                  return ClipRRect(
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+                    child: Image.network(url, fit: BoxFit.cover, width: double.infinity),
+                  );
+                },
+              );
+            }).toList(),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  place.name,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 22,
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  '${place.country}, ${place.continent}',
+                  // '',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey[700],
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  place.description,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  'Activities:',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  place.activities,
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    SizedBox(
-                      width: double.infinity,
-                      child: Text(
-                        place.name,
-                        maxLines: 1,
-                        style: TextStyle(
-                          overflow: TextOverflow.ellipsis,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22,
-                        ),
-                      ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(Icons.edit),
                     ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: Text(
-                        place.description,
-                        maxLines: 5,
-                        style: TextStyle(
-                          fontSize: 18,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(Icons.delete),
                     ),
-                    SizedBox(height: 20),
-                    SizedBox(
-                      width: double.infinity,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            child: Text(
-                              'Activities: ${place.activities}',
-                              style: TextStyle(fontSize: 18),
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              Container(
-                                child: IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(Icons.delete),
-                                ),
-                              ),
-                              Container(
-                                child: IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(Icons.edit),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    )
                   ],
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
