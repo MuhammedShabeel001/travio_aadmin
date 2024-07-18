@@ -76,6 +76,13 @@ class PlaceProvider with ChangeNotifier {
     }
   }
 
+  void removeImage(int index) {
+    if (index >= 0 && index < _images.length) {
+      _images.removeAt(index);
+      notifyListeners();
+    }
+  }
+
   void toggleActivity(String activity) {
     if (selectedActivities.contains(activity)) {
       selectedActivities.remove(activity);

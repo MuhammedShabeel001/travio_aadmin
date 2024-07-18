@@ -19,10 +19,19 @@ class AddDetailsPage extends StatelessWidget {
           key: placeProvider.formKey,
           child: SingleChildScrollView(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextFormField(
                   controller: placeProvider.nameController,
-                  decoration: const InputDecoration(labelText: 'Place Name'),
+                  decoration: InputDecoration(
+                    labelText: 'Place Name',
+                    filled: true,
+                    fillColor: Colors.grey[200],
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter a place name';
@@ -30,9 +39,18 @@ class AddDetailsPage extends StatelessWidget {
                     return null;
                   },
                 ),
+                const SizedBox(height: 16.0),
                 TextFormField(
                   controller: placeProvider.descriptionController,
-                  decoration: const InputDecoration(labelText: 'Description'),
+                  decoration: InputDecoration(
+                    labelText: 'Description',
+                    filled: true,
+                    fillColor: Colors.grey[200],
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter a description';
@@ -40,44 +58,71 @@ class AddDetailsPage extends StatelessWidget {
                     return null;
                   },
                 ),
-                DropdownButtonFormField<String>(
-                  decoration: const InputDecoration(labelText: 'Country'),
-                  value: placeProvider.selectedCountry,
-                  items: placeProvider.countries.map((country) {
-                    return DropdownMenuItem(
-                      value: country,
-                      child: Text(country),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    placeProvider.selectedCountry = value;
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please select a country';
-                    }
-                    return null;
-                  },
+                const SizedBox(height: 16.0),
+                Row(
+                  children: [
+                    Expanded(
+                      child: DropdownButtonFormField<String>(
+                        decoration: InputDecoration(
+                          labelText: 'Country',
+                          filled: true,
+                          fillColor: Colors.grey[200],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                        value: placeProvider.selectedCountry,
+                        items: placeProvider.countries.map((country) {
+                          return DropdownMenuItem(
+                            value: country,
+                            child: Text(country),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          placeProvider.selectedCountry = value;
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please select a country';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 16.0),
+                    Expanded(
+                      child: DropdownButtonFormField<String>(
+                        decoration: InputDecoration(
+                          labelText: 'Continent',
+                          filled: true,
+                          fillColor: Colors.grey[200],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                        value: placeProvider.selectedContinent,
+                        items: placeProvider.continents.map((continent) {
+                          return DropdownMenuItem(
+                            value: continent,
+                            child: Text(continent),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          placeProvider.selectedContinent = value;
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please select a continent';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-                DropdownButtonFormField<String>(
-                  decoration: const InputDecoration(labelText: 'Continent'),
-                  value: placeProvider.selectedContinent,
-                  items: placeProvider.continents.map((continent) {
-                    return DropdownMenuItem(
-                      value: continent,
-                      child: Text(continent),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    placeProvider.selectedContinent = value;
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please select a continent';
-                    }
-                    return null;
-                  },
-                ),
+                const SizedBox(height: 16.0),
                 Wrap(
                   spacing: 8.0,
                   children: placeProvider.availableActivities.map((activity) {
@@ -93,13 +138,41 @@ class AddDetailsPage extends StatelessWidget {
                 const SizedBox(height: 16.0),
                 placeProvider.images.isEmpty
                     ? const Text('No images selected.')
-                    : GridView.builder(
-                        shrinkWrap: true,
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-                        itemCount: placeProvider.images.length,
-                        itemBuilder: (context, index) {
-                          return Image.file(placeProvider.images[index]);
-                        },
+                    : SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: List.generate(placeProvider.images.length, (index) {
+                            return Stack(
+                              children: [
+                                Container(
+                                  margin: const EdgeInsets.all(8.0),
+                                  width: 100.0,
+                                  height: 100.0,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    image: DecorationImage(
+                                      image: FileImage(placeProvider.images[index]),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 4.0,
+                                  right: 4.0,
+                                  child: InkWell(
+                                    onTap: () {
+                                      placeProvider.removeImage(index);
+                                    },
+                                    child: const Icon(
+                                      Icons.remove_circle,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }),
+                        ),
                       ),
                 TextButton(
                   onPressed: placeProvider.pickImages,
@@ -112,7 +185,7 @@ class AddDetailsPage extends StatelessWidget {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Row(
-                            children:  [
+                            children: [
                               CircularProgressIndicator(),
                               SizedBox(width: 16.0),
                               Text("Submitting..."),
