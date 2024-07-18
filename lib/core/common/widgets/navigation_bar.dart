@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
-import 'package:travio_admin_/Test.dart';
+import 'package:travio_admin_/test_page.dart';
 import 'package:travio_admin_/features/add/view/locations/pages/add_location.dart';
 
 class TNavBar extends StatefulWidget {
@@ -15,10 +15,10 @@ class _TNavBarState extends State<TNavBar> {
   
 
   final List<Widget> _pages = [
-    page1(),
-    page2(),
-    AddLocationPage(),
-    page4(),
+    const Page1(),
+    const Page2(),
+    const AddLocationPage(),
+    const Page4(),
   ];
 
   @override
@@ -28,7 +28,7 @@ class _TNavBarState extends State<TNavBar> {
        
         body: _pages[currentIndex],
         bottomNavigationBar: BottomBarFloating(
-          items: [
+          items: const [
             TabItem(icon: Icons.analytics, title: 'Analytics'),
             TabItem(icon: Icons.list, title: 'Users List'),
             TabItem(icon: Icons.add, title: 'Add'),

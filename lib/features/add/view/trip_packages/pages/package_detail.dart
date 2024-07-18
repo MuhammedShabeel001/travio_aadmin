@@ -1,6 +1,7 @@
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:travio_admin_/features/add/view/locations/widgets/detail_card.dart';
+// import 'package:travio_admin_/features/add/view/locations/widgets/detail_card.dart';
+// import 'package:travio_admin_/features/add/view/locations/widgets/detail_card.dart';
 
 class PackageDetails extends StatelessWidget {
   const PackageDetails({super.key});
@@ -9,7 +10,7 @@ class PackageDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Packages'),
+        title: const Text('Packages'),
         centerTitle: true,
         backgroundColor: Colors.purple.shade200,
       ),
@@ -17,15 +18,17 @@ class PackageDetails extends StatelessWidget {
         onPressed: () {
           // Navigator.push(context, MaterialPageRoute(builder: (context) => AddPlacePage(),));
         },
-        child: Icon(Icons.add),
+        
         backgroundColor: Colors.purple.shade200,
+        child: const Icon(Icons.add),
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: ListView.builder(
           itemCount: 6,
           itemBuilder: (context, index) {
-            // return DetailCard();
+            // return DetailCard(place: );
+            return const Text('data');
           },
         ),
       ),

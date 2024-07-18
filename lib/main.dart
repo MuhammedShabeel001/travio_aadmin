@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 // import 'package:travio_admin_/core/common/pages/navbar.dart';
-import 'package:travio_admin_/core/common/widgets/navigationBar.dart';
+import 'package:travio_admin_/core/common/widgets/navigation_bar.dart';
 import 'package:travio_admin_/features/add/controller/place_provider.dart';
 import 'package:travio_admin_/firebase_options.dart';
 

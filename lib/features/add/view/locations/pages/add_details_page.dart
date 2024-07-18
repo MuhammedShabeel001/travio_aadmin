@@ -3,13 +3,15 @@ import 'package:provider/provider.dart';
 import 'package:travio_admin_/features/add/controller/place_provider.dart';
 
 class AddDetailsPage extends StatelessWidget {
+  const AddDetailsPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     final placeProvider = Provider.of<PlaceProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Details'),
+        title: const Text('Add Details'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -20,7 +22,7 @@ class AddDetailsPage extends StatelessWidget {
               children: [
                 TextFormField(
                   controller: placeProvider.nameController,
-                  decoration: InputDecoration(labelText: 'Place Name'),
+                  decoration: const InputDecoration(labelText: 'Place Name'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter a place name';
@@ -30,7 +32,7 @@ class AddDetailsPage extends StatelessWidget {
                 ),
                 TextFormField(
                   controller: placeProvider.descriptionController,
-                  decoration: InputDecoration(labelText: 'Description'),
+                  decoration: const InputDecoration(labelText: 'Description'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter a description';
@@ -39,7 +41,7 @@ class AddDetailsPage extends StatelessWidget {
                   },
                 ),
                 DropdownButtonFormField<String>(
-                  decoration: InputDecoration(labelText: 'Country'),
+                  decoration: const InputDecoration(labelText: 'Country'),
                   value: placeProvider.selectedCountry,
                   items: placeProvider.countries.map((country) {
                     return DropdownMenuItem(
@@ -58,7 +60,7 @@ class AddDetailsPage extends StatelessWidget {
                   },
                 ),
                 DropdownButtonFormField<String>(
-                  decoration: InputDecoration(labelText: 'Continent'),
+                  decoration: const InputDecoration(labelText: 'Continent'),
                   value: placeProvider.selectedContinent,
                   items: placeProvider.continents.map((continent) {
                     return DropdownMenuItem(
@@ -88,12 +90,12 @@ class AddDetailsPage extends StatelessWidget {
                     );
                   }).toList(),
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 placeProvider.images.isEmpty
-                    ? Text('No images selected.')
+                    ? const Text('No images selected.')
                     : GridView.builder(
                         shrinkWrap: true,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
                         itemCount: placeProvider.images.length,
                         itemBuilder: (context, index) {
                           return Image.file(placeProvider.images[index]);
@@ -101,17 +103,54 @@ class AddDetailsPage extends StatelessWidget {
                       ),
                 TextButton(
                   onPressed: placeProvider.pickImages,
-                  child: Text('Pick Images'),
+                  child: const Text('Pick Images'),
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 ElevatedButton(
                   onPressed: () async {
                     if (placeProvider.formKey.currentState?.validate() ?? false) {
-                      await placeProvider.submitForm();
-                      Navigator.pop(context); // Go back to the previous page
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Row(
+                            children:  [
+                              CircularProgressIndicator(),
+                              SizedBox(width: 16.0),
+                              Text("Submitting..."),
+                            ],
+                          ),
+                        ),
+                      );
+
+                      await placeProvider.submitForm(context);
+
+                      // Check if submission was successful before navigating back
+                      if (placeProvider.submissionSuccessful) {
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Successfully added!'),
+                          ),
+                        );
+                        Navigator.pop(context); // Go back to the previous page
+                      } else {
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Failed to add place. Please try again.'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Please fill in all required fields and select photos.'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
                     }
                   },
-                  child: Text('Submit'),
+                  child: const Text('Submit'),
                 ),
               ],
             ),

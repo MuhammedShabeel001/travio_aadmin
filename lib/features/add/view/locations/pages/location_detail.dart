@@ -5,7 +5,7 @@ import 'package:travio_admin_/features/add/view/locations/pages/add_details_page
 import 'package:travio_admin_/features/add/view/locations/widgets/detail_card.dart';
 
 class LocationDetails extends StatelessWidget {
-  const LocationDetails({Key? key}) : super(key: key);
+  const LocationDetails({super.key});
 
   @override
   Widget build(BuildContext context) {

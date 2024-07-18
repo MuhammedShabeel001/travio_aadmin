@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:travio_admin_/features/add/view/locations/pages/location_detail.dart';
 import 'package:travio_admin_/features/add/view/locations/widgets/add_location_card.dart';
@@ -17,7 +17,7 @@ class AddLocationPage extends StatelessWidget {
           Expanded(
               flex: 1,
               child: Container(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                 // color: Colors.yellow,
                 child: InkWell(
                     onTap: () {
@@ -25,10 +25,10 @@ class AddLocationPage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => LocationDetails()),
+                            builder: (context) =>const  LocationDetails()),
                       );
                     },
-                    child: AddItemCard(
+                    child: const AddItemCard(
                       title: 'Add Location',
                       color: Colors.blue,
                     )),
@@ -37,23 +37,23 @@ class AddLocationPage extends StatelessWidget {
               flex: 1,
               child: Container(
                 // color: Colors.orange,
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                 child: InkWell(
                   onTap: () {
                     log('add location tapped');
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PackageDetails()),
+                          builder: (context) => const PackageDetails()),
                     );
                   },
-                  child: AddItemCard(title: 'Add Package',color: Colors.green,),
+                  child: const AddItemCard(title: 'Add Package',color: Colors.green,),
                 ),
               )),
           Expanded(
               flex: 1,
               child: Container(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                 // child: ,
                 // color: Colors.red,
               )),

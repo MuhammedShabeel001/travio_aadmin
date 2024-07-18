@@ -1,18 +1,19 @@
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:travio_admin_/features/add/model/place_model.dart';
 
 class PlaceProvider with ChangeNotifier {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  // final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore db = FirebaseFirestore.instance;
 
-  final _nameController = TextEditingController();
-  final _descriptionController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String? selectedCountry;
   String? selectedContinent;
@@ -60,6 +61,9 @@ class PlaceProvider with ChangeNotifier {
   PlaceModel? _place;
   PlaceModel? get place => _place;
 
+  bool _submissionSuccessful = false;
+  bool get submissionSuccessful => _submissionSuccessful;
+
   Future<void> pickImages() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.image,
@@ -92,42 +96,64 @@ class PlaceProvider with ChangeNotifier {
     }
   }
 
-  Future<void> submitForm() async {
+  Future<void> submitForm(BuildContext context) async {
+    _submissionSuccessful = false;
+
     if (_nameController.text.isNotEmpty &&
         _descriptionController.text.isNotEmpty &&
         selectedCountry != null &&
         selectedContinent != null &&
         selectedActivities.isNotEmpty &&
         _images.isNotEmpty) {
-      await _uploadImages();
+      try {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Row(
+              children:  [
+                CircularProgressIndicator(),
+                SizedBox(width: 16.0),
+                Text("Submitting..."),
+              ],
+            ),
+          ),
+        );
 
-      DocumentReference docRef = FirebaseFirestore.instance.collection('places').doc();
-      String placeId = docRef.id;
+        await _uploadImages();
 
-      await docRef.set({
-        'id': placeId,
-        'name': _nameController.text,
-        'description': _descriptionController.text,
-        'country': selectedCountry,
-        'continent': selectedContinent,
-        'activities': selectedActivities.join(', '),
-        'image_urls': _uploadedImagesUrls,
-      });
+        DocumentReference docRef = FirebaseFirestore.instance.collection('places').doc();
+        String placeId = docRef.id;
 
-      // Fetch the new place and add it to the list
-      DocumentSnapshot locationDoc = await docRef.get();
-      PlaceModel newPlace = PlaceModel.fromMap(locationDoc.data() as Map<String, dynamic>);
-      _places.add(newPlace);
+        await docRef.set({
+          'id': placeId,
+          'name': _nameController.text,
+          'description': _descriptionController.text,
+          'country': selectedCountry,
+          'continent': selectedContinent,
+          'activities': selectedActivities.join(', '),
+          'image_urls': _uploadedImagesUrls,
+        });
 
-      _nameController.clear();
-      _descriptionController.clear();
-      selectedCountry = null;
-      selectedContinent = null;
-      selectedActivities.clear();
-      _images = [];
-      _uploadedImagesUrls.clear();
-      notifyListeners();
+        // Fetch the new place and add it to the list
+        DocumentSnapshot locationDoc = await docRef.get();
+        PlaceModel newPlace = PlaceModel.fromMap(locationDoc.data() as Map<String, dynamic>);
+        _places.add(newPlace);
+
+        _nameController.clear();
+        _descriptionController.clear();
+        selectedCountry = null;
+        selectedContinent = null;
+        selectedActivities.clear();
+        _images = [];
+        _uploadedImagesUrls.clear();
+        _submissionSuccessful = true;
+        notifyListeners();
+      } catch (e) {
+        log('Error uploading data: $e');
+      } finally {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      }
     }
+    notifyListeners();
   }
 
   Future<void> fetchAllLocations() async {
