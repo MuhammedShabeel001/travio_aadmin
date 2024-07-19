@@ -1,5 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:travio_admin_/features/add/controller/place_provider.dart';
 import 'package:travio_admin_/features/add/model/place_model.dart';
 
 class DetailCard extends StatelessWidget {
@@ -9,6 +11,8 @@ class DetailCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final placeProvider = Provider.of<PlaceProvider>(context, listen: false);
+
     return Card(
       color: Colors.purple[100],
       child: Column(
@@ -25,7 +29,7 @@ class DetailCard extends StatelessWidget {
               return Builder(
                 builder: (BuildContext context) {
                   return ClipRRect(
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
                     child: Image.network(url, fit: BoxFit.cover, width: double.infinity),
                   );
                 },
@@ -39,55 +43,62 @@ class DetailCard extends StatelessWidget {
               children: [
                 Text(
                   place.name,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 22,
                   ),
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
                   '${place.country}, ${place.continent}',
-                  // '',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.grey[700],
                   ),
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
                   place.description,
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                   ),
                 ),
-                SizedBox(height: 10),
-                Text(
+                const SizedBox(height: 10),
+                const Text(
                   'Activities:',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
                   place.activities,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.edit),
+                      onPressed: () {
+                        // Implement edit functionality here
+                        // placeProvider.editLocation(place);
+                        // ScaffoldMessenger.of(context).showSnackBar(
+                        //   const SnackBar(content: Text('Location edited successfully')),
+                        // );
+                      },
+                      icon: const Icon(Icons.edit),
                     ),
                     IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.delete),
+                      onPressed: () {
+                        _showDeleteConfirmationDialog(context, placeProvider, place.id);
+                      },
+                      icon: const Icon(Icons.delete),
                     ),
                   ],
                 ),
@@ -96,6 +107,33 @@ class DetailCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void _showDeleteConfirmationDialog(BuildContext context, PlaceProvider placeProvider, String placeId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Delete Location'),
+          content: const Text('Are you sure you want to delete this location?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                placeProvider.deleteLocation(placeId, context);
+              },
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

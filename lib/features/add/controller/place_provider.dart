@@ -174,4 +174,20 @@ class PlaceProvider with ChangeNotifier {
       log('Error fetching location data: $e');
     }
   }
+
+  Future<void> deleteLocation(String placeId, BuildContext context) async {
+    try {
+      await db.collection('places').doc(placeId).delete();
+      _places.removeWhere((place) => place.id == placeId);
+      notifyListeners();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Location deleted successfully')),
+      );
+    } catch (e) {
+      log('Error deleting location: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error deleting location')),
+      );
+    }
+  }
 }
