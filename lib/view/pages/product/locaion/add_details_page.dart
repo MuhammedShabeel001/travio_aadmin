@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:travio_admin_/features/add/controller/place_provider.dart';
+import 'package:travio_admin_/controller/place_provider.dart';
 
 class AddDetailsPage extends StatelessWidget {
   const AddDetailsPage({super.key});

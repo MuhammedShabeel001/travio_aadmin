@@ -2,9 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 // import 'package:travio_admin_/core/common/pages/navbar.dart';
+// ignore: unused_import
 import 'package:travio_admin_/core/common/widgets/navigation_bar.dart';
-import 'package:travio_admin_/features/add/controller/place_provider.dart';
-import 'package:travio_admin_/firebase_options.dart';
+import 'package:travio_admin_/controller/place_provider.dart';
+import 'package:travio_admin_/core/firebase/firebase_options.dart';
+import 'package:travio_admin_/view/pages/dashboard/dashbord_page.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();

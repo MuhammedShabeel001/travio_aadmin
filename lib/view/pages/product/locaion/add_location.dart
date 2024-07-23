@@ -2,9 +2,9 @@ import 'dart:developer';
 
 // import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:travio_admin_/features/add/view/locations/pages/location_detail.dart';
-import 'package:travio_admin_/features/add/view/locations/widgets/add_location_card.dart';
-import 'package:travio_admin_/features/add/view/trip_packages/pages/package_detail.dart';
+import 'package:travio_admin_/view/pages/product/locaion/location_detail.dart';
+import 'package:travio_admin_/view/widgets/product/location/add_location_card.dart';
+// import 'package:travio_admin_/features/add/view/trip_packages/pages/package_detail.dart';
 
 class AddLocationPage extends StatelessWidget {
   const AddLocationPage({super.key});
@@ -41,11 +41,12 @@ class AddLocationPage extends StatelessWidget {
                 child: InkWell(
                   onTap: () {
                     log('add location tapped');
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const PackageDetails()),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //       // builder: (context) => const PackageDetails()
+                    //       ),
+                    // );
                   },
                   child: const AddItemCard(title: 'Add Package',color: Colors.green,),
                 ),

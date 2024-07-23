@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:travio_admin_/features/add/controller/place_provider.dart';
-import 'package:travio_admin_/features/add/view/locations/pages/add_details_page.dart';
-import 'package:travio_admin_/features/add/view/locations/widgets/detail_card.dart';
+import 'package:travio_admin_/controller/place_provider.dart';
+import 'package:travio_admin_/view/pages/product/locaion/add_details_page.dart';
+import 'package:travio_admin_/view/widgets/product/location/detail_card.dart';
 
 class LocationDetails extends StatelessWidget {
   const LocationDetails({super.key});

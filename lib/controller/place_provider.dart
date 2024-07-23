@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:travio_admin_/features/add/model/place_model.dart';
+import 'package:travio_admin_/model/place_model.dart';
 
 class PlaceProvider with ChangeNotifier {
   // final FirebaseAuth _auth = FirebaseAuth.instance;

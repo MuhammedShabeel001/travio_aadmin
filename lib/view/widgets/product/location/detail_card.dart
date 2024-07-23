@@ -1,8 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:travio_admin_/features/add/controller/place_provider.dart';
-import 'package:travio_admin_/features/add/model/place_model.dart';
+import 'package:travio_admin_/controller/place_provider.dart';
+import 'package:travio_admin_/model/place_model.dart';
 
 class DetailCard extends StatelessWidget {
   final PlaceModel place;
@@ -96,7 +96,7 @@ class DetailCard extends StatelessWidget {
                     ),
                     IconButton(
                       onPressed: () {
-                        _showDeleteConfirmationDialog(context, placeProvider, place.id);
+                        showDeleteConfirmationDialog(context, placeProvider, place.id);
                       },
                       icon: const Icon(Icons.delete),
                     ),
@@ -110,7 +110,7 @@ class DetailCard extends StatelessWidget {
     );
   }
 
-  void _showDeleteConfirmationDialog(BuildContext context, PlaceProvider placeProvider, String placeId) {
+  void showDeleteConfirmationDialog(BuildContext context, PlaceProvider placeProvider, String placeId) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
