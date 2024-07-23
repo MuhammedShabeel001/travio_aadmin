@@ -3,6 +3,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:travio_admin_/test_page.dart';
 import 'package:travio_admin_/view/pages/dashboard/dashbord_page.dart';
+import 'package:travio_admin_/view/pages/manage/active_users.dart';
 import 'package:travio_admin_/view/pages/product/locaion/add_location.dart';
 
 class TNavBar extends StatefulWidget {
@@ -17,7 +18,7 @@ class _TNavBarState extends State<TNavBar> {
 
   final List<Widget> _pages = [
     const DashbordPage(),
-    const Page2(),
+    const UsersPage(),
     const AddLocationPage(),
     const Page4(),
   ];

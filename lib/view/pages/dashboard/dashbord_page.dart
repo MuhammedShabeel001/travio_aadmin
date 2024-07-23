@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:travio_admin_/view/widgets/Dashbord/count_card.dart';
 import 'package:travio_admin_/view/widgets/Dashbord/user_count.dart';
+import 'package:travio_admin_/view/widgets/global/t_app_bar.dart';
 
 class DashbordPage extends StatelessWidget {
   const DashbordPage({super.key});
@@ -9,14 +10,7 @@ class DashbordPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.orangeAccent,
-        title: const Text(
-          'Dashbord',
-          style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-        ),
-        actions: const [],
-      ),
+      appBar: tAppBar('Dashbord'),
       body:  ListView(
         children: const [ SizedBox(
           height: 220,
@@ -35,6 +29,8 @@ class DashbordPage extends StatelessWidget {
       ])
     );
   }
+
+  
 }
 
 
