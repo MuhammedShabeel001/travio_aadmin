@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:travio_admin_/controller/place_provider.dart';
-import 'package:travio_admin_/view/pages/product/locaion2/add_details_page.dart';
-import 'package:travio_admin_/view/widgets/product/location/detail_card.dart';
+import 'package:travio_admin/view/pages/product/locaion2/add_details_page.dart';
+
+
+import '../../../../controller/place_provider.dart';
+import '../../../widgets/product/location/detail_card.dart';
 
 class LocationDetails extends StatelessWidget {
   const LocationDetails({super.key});
@@ -18,7 +20,7 @@ class LocationDetails extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Locations'),
+        title: const Text('Locations'),
         centerTitle: true,
         backgroundColor: Colors.purple.shade200,  
       ),
@@ -26,18 +28,18 @@ class LocationDetails extends StatelessWidget {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AddDetailsPage()),
+            MaterialPageRoute(builder: (context) => const AddDetailsPage()),
           );
         },
-        child: Icon(Icons.add),
         backgroundColor: Colors.purple.shade200,
+        child: const Icon(Icons.add),
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Consumer<PlaceProvider>(
           builder: (context, placeProvider, child) {
             if (placeProvider.places.isEmpty) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             } else {
               return ListView.builder(
                 itemCount: placeProvider.places.length,

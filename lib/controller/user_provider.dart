@@ -56,7 +56,7 @@ class UserProvider with ChangeNotifier {
       _dataFetched = true; // Data has been fetched
       notifyListeners();
     } catch (e) {
-      print('Error fetching users: $e');
+      log('Error fetching users: $e');
     }
   }
 

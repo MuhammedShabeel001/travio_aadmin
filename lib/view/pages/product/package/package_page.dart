@@ -29,9 +29,9 @@ class PackagePage extends StatelessWidget {
         onPressed: () {
           // Add package action
         },
-        backgroundColor: Colors.orange, // Customize the button color
-        child: Icon(Icons.add),
-        tooltip: 'Add Package',
+        backgroundColor: Colors.orange,
+        tooltip: 'Add Package', // Customize the button color
+        child: const Icon(Icons.add),
       ),
     );
   }

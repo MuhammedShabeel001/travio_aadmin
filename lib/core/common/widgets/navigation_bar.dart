@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:travio_admin_/test_page.dart';
-import 'package:travio_admin_/view/pages/dashboard/dashbord_page.dart';
-import 'package:travio_admin_/view/pages/manage/active_users.dart';
-import 'package:travio_admin_/view/pages/product/locaion2/add_location.dart';
-import 'package:travio_admin_/view/pages/product/product_page.dart';
+// import 'package:travio_admin/test_page.dart';
+// import 'package:travio_admin/view/pages/dashboard/dashbord_page.dart';
+// import 'package:travio_admin/view/pages/manage/active_users.dart';
+// import 'package:travio_admin/view/pages/product/product_page.dart';
+
+import '../../../view/pages/dashboard/dashbord_page.dart';
+import '../../../view/pages/manage/active_users.dart';
+import '../../../view/pages/product/product_page.dart';
 
 class TNavBar extends StatefulWidget {
   const TNavBar({super.key});
@@ -21,7 +24,7 @@ class _TNavBarState extends State<TNavBar> {
     const DashbordPage(),
     const UsersPage(),
     const ProductPage(),
-    const Page4(),
+    // const Page4(),
   ];
 
   @override
@@ -33,7 +36,7 @@ class _TNavBarState extends State<TNavBar> {
           SvgIcon('assets/icons/dashbord.svg'),
           SvgIcon('assets/icons/manage.svg'),
           SvgIcon('assets/icons/products.svg'),
-          SvgIcon('assets/icons/special.svg'),
+          // SvgIcon('assets/icons/special.svg'),
         ],
         backgroundColor: Colors.white,
         color: const Color.fromARGB(255, 255, 236, 206),

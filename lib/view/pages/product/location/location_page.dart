@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:travio_admin_/view/widgets/global/search_bar.dart';
-import 'package:travio_admin_/view/widgets/product/location/detail_card.dart';
-import 'package:travio_admin_/controller/place_provider.dart';
+import 'package:travio_admin/controller/place_provider.dart';
+
+import '../../../widgets/global/search_bar.dart';
+import '../../../widgets/product/location/detail_card.dart';
+// import 'package:travio_admin/view/widgets/global/search_bar.dart';
+// import 'package:travio_admin/view/widgets/product/location/detail_card.dart';
+// import 'package:travio_admin/controller/place_provider.dart';
 
 class LocationPage extends StatelessWidget {
   const LocationPage({super.key});
@@ -74,8 +78,8 @@ class LocationPage extends StatelessWidget {
           // Add location action
         },
         backgroundColor: Colors.orange,
-        child: const Icon(Icons.add),
         tooltip: 'Add Location',
+        child: const Icon(Icons.add),
       ),
     );
   }

@@ -6,7 +6,7 @@ class TripTicket extends StatelessWidget {
   final String fromLocation;
   final String toLocation;
 
-  TripTicket({
+  const TripTicket({super.key, 
     required this.tripName,
     required this.fromLocation,
     required this.toLocation,
@@ -15,8 +15,8 @@ class TripTicket extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(16.0),
-      padding: EdgeInsets.all(16.0),
+      margin: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16.0),
@@ -25,7 +25,7 @@ class TripTicket extends StatelessWidget {
             color: Colors.grey.withOpacity(0.5),
             spreadRadius: 5,
             blurRadius: 7,
-            offset: Offset(0, 3),
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -34,42 +34,42 @@ class TripTicket extends StatelessWidget {
         children: [
           Text(
             tripName,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Row(
             children: [
-              Icon(Icons.location_on, color: Colors.grey),
-              SizedBox(width: 10),
+              const Icon(Icons.location_on, color: Colors.grey),
+              const SizedBox(width: 10),
               Expanded(
                 child: TextField(
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
                     labelText: fromLocation,
                   ),
                 ),
               ),
             ],
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Row(
             children: [
-              Icon(Icons.circle, color: Colors.grey),
-              SizedBox(width: 10),
+              const Icon(Icons.circle, color: Colors.grey),
+              const SizedBox(width: 10),
               Expanded(
                 child: TextField(
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
                     labelText: toLocation,
                   ),
                 ),
               ),
             ],
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Center(
             child: BarcodeWidget(
               data: '1234567890',

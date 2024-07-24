@@ -5,7 +5,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:travio_admin_/model/place_model.dart';
+// import 'package:travio_admin/model/place_model.dart';
+
+import '../model/place_model.dart';
 
 class PlaceProvider with ChangeNotifier {
   final FirebaseFirestore db = FirebaseFirestore.instance;
@@ -73,8 +75,8 @@ class PlaceProvider with ChangeNotifier {
 
         return place.name.toLowerCase().contains(searchLower) ||
               //  place.description.toLowerCase().contains(searchLower) ||
-               place.country?.toLowerCase().contains(searchLower) == true ||
-               place.continent?.toLowerCase().contains(searchLower) == true ||
+               place.country.toLowerCase().contains(searchLower) == true ||
+               place.continent.toLowerCase().contains(searchLower) == true ||
                activities.any((activity) => activity.contains(searchLower));
       }).toList();
     }

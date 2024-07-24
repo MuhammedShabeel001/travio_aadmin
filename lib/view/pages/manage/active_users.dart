@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:travio_admin_/controller/user_provider.dart';
-import 'package:travio_admin_/view/widgets/global/search_bar.dart';
-import 'package:travio_admin_/view/widgets/global/t_app_bar.dart';
-import 'package:travio_admin_/view/widgets/manage/user_tile.dart';
+
+import '../../../controller/user_provider.dart';
+import '../../widgets/global/search_bar.dart';
+import '../../widgets/global/t_app_bar.dart';
+import '../../widgets/manage/user_tile.dart';
+// import 'package:travio_admin/controller/user_provider.dart';
+// import 'package:travio_admin/view/widgets/global/search_bar.dart';
+// import 'package:travio_admin/view/widgets/global/t_app_bar.dart';
+// import 'package:travio_admin/view/widgets/manage/user_tile.dart';/
 
 class UsersPage extends StatelessWidget {
   const UsersPage({super.key});

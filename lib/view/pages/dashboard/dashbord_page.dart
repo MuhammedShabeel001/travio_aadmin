@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:travio_admin_/controller/place_provider.dart';
-import 'package:travio_admin_/view/widgets/Dashbord/count_card.dart';
-import 'package:travio_admin_/view/widgets/Dashbord/user_count.dart';
-import 'package:travio_admin_/view/widgets/global/t_app_bar.dart';
+import 'package:travio_admin/controller/place_provider.dart';
+import 'package:travio_admin/view/widgets/Dashbord/count_card.dart';
+import 'package:travio_admin/view/widgets/global/t_app_bar.dart';
+
 
 import '../../../controller/user_provider.dart';
+import '../../widgets/Dashbord/user_count.dart';
 
 class DashbordPage extends StatelessWidget {
   const DashbordPage({super.key});
@@ -35,7 +36,7 @@ class DashbordPage extends StatelessWidget {
                     child: Consumer<PlaceProvider>(
                       builder: (context, placeProvider, child) {
                         if (placeProvider.filteredPlaces.isEmpty) {
-                          return CountCard(
+                          return const CountCard(
                             count: '',
                             label: 'Locatioins',
                           );
@@ -49,7 +50,7 @@ class DashbordPage extends StatelessWidget {
                         }
                       },
                     )),
-                Expanded(
+                const Expanded(
                     flex: 1, child: CountCard(count: '65', label: 'Packages')),
               ],
             ),
@@ -57,7 +58,7 @@ class DashbordPage extends StatelessWidget {
           Consumer<UserProvider>(
             builder: (context, userProvider, child) {
               if (userProvider.filteredUsers.isEmpty) {
-                return UserCount(count: '', label: 'Active usrs');
+                return const UserCount(count: '', label: 'Active usrs');
               }else{
                 return UserCount(count: userProvider.filteredUsers.length.toString(), label: userProvider.filteredUsers.length <=1 ? 'Active user' : 'Active users');
               }

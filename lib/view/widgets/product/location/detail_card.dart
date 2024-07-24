@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:travio_admin_/controller/place_provider.dart';
-import 'package:travio_admin_/model/place_model.dart';
+
+import '../../../../controller/place_provider.dart';
+import '../../../../model/place_model.dart';
+// import 'package:travio_admin/controller/place_provider.dart';
+// import 'package:travio_admin/model/place_model.dart';
 
 class DetailCard extends StatelessWidget {
   final PlaceModel place;

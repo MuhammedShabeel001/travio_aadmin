@@ -1,4 +1,4 @@
-package com.shabeel.travio_admin_
+package com.shabeel.travio_admin
 
 import io.flutter.embedding.android.FlutterActivity
 

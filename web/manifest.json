@@ -1,6 +1,6 @@
 {
-    "name": "travio_admin_",
-    "short_name": "travio_admin_",
+    "name": "travio_admin",
+    "short_name": "travio_admin",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

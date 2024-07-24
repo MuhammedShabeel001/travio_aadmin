@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:travio_admin_/view/pages/product/location/location_page.dart';
-import 'package:travio_admin_/view/pages/product/package/package_page.dart';
+import 'package:travio_admin/view/pages/product/location/location_page.dart';
+import 'package:travio_admin/view/pages/product/package/package_page.dart';
+// import 'package:travio_admin/view/pages/product/location/location_page.dart';
+// import 'package:travio_admin/view/pages/product/package/package_page.dart';
 
 class ProductPage extends StatelessWidget {
   const ProductPage({super.key});
