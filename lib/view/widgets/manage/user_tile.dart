@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart'; // Assuming you're using flutter_svg package for SvgIcon
 
@@ -7,18 +6,28 @@ class UserTile extends StatelessWidget {
   final String image;
   final String name;
   final String email;
-  final String reviews;
+  final String? reviews; // Allowing null value
 
   const UserTile({
     super.key,
     required this.image,
     required this.name,
     required this.email,
-    required this.reviews,
+    this.reviews, // Optional parameter
   });
 
   @override
   Widget build(BuildContext context) {
+    // Determine the image to display based on the pronouns
+    String imagePath = 'assets/image/default_user.png'; // Default image
+    if (image == 'he/him') {
+      imagePath = 'assets/image/boy.png'; // Path for boy image
+    } else if (image == 'she/her') {
+      imagePath = 'assets/image/girl.png'; // Path for girl image
+    } else if (image == 'they/them') {
+      imagePath = 'assets/image/they_them.png'; // Path for non-binary image
+    }
+
     return Card(
       elevation: 4,
       color: Colors.white,
@@ -39,21 +48,26 @@ class UserTile extends StatelessWidget {
               height: 60,
               width: 60,
               child: Image.asset(
-                image,
+                imagePath, // Use imagePath here
                 fit: BoxFit.cover,
               ),
             ),
           ),
-          title: Text(name,
-              style:
-                  const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+          title: Text(
+            name,
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          ),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(email,
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold)),
-              Text(reviews, style: const TextStyle(fontSize: 16)),
+              Text(
+                email,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                reviews ?? 'No reviews',
+                style: const TextStyle(fontSize: 16),
+              ),
             ],
           ),
           trailing: PopupMenuButton<String>(

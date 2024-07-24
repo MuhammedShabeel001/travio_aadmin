@@ -7,6 +7,7 @@ import 'package:travio_admin_/controller/user_provider.dart';
 import 'package:travio_admin_/core/common/widgets/navigation_bar.dart';
 import 'package:travio_admin_/controller/place_provider.dart';
 import 'package:travio_admin_/core/firebase/firebase_options.dart';
+import 'package:travio_admin_/view/pages/manage/active_users.dart';
 import 'package:travio_admin_/view/pages/product/product_page.dart';
 // import 'package:travio_admin_/view/pages/dashboard/dashbord_page.dart';
 
@@ -34,7 +35,8 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
         // home: TNavBar(),
-        home: const ProductPage(),
+        // home: const ProductPage(),
+        home: UsersPage(),
       ),
     );
   }

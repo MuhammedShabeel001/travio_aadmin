@@ -10,12 +10,13 @@ class LocationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final placeProvider = Provider.of<PlaceProvider>(context, listen: false);
+    final placeProvider = Provider.of<PlaceProvider>(context);
 
     // Fetch locations when the widget is built for the first time
     WidgetsBinding.instance.addPostFrameCallback((_) {
       placeProvider.fetchAllLocations();
     });
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
@@ -23,15 +24,17 @@ class LocationPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TSearchBar(
-              hint: 'Search by location ',
-              controller: TextEditingController(),
-              onChanged: (value) {},
+              hint: 'Search by location name, country, continent, or activity',
+              controller: placeProvider.searchController,
+              onChanged: (value) {
+                placeProvider.updateSearchQuery(value);
+              },
             ),
           ),
           Expanded(
             child: Consumer<PlaceProvider>(
               builder: (context, placeProvider, child) {
-                if (placeProvider.places.isEmpty) {
+                if (placeProvider.filteredPlaces.isEmpty) {
                   return ListView.builder(
                     itemCount: 5, // Number of shimmer placeholders
                     itemBuilder: (context, index) {
@@ -55,9 +58,9 @@ class LocationPage extends StatelessWidget {
                   );
                 } else {
                   return ListView.builder(
-                    itemCount: placeProvider.places.length,
+                    itemCount: placeProvider.filteredPlaces.length,
                     itemBuilder: (context, index) {
-                      return DetailCard(place: placeProvider.places[index]);
+                      return DetailCard(place: placeProvider.filteredPlaces[index]);
                     },
                   );
                 }

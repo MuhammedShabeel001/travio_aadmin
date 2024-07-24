@@ -2,16 +2,14 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:travio_admin_/model/place_model.dart';
 
 class PlaceProvider with ChangeNotifier {
-  // final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore db = FirebaseFirestore.instance;
-
+    TextEditingController searchController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -37,7 +35,6 @@ class PlaceProvider with ChangeNotifier {
     'India',
     'China',
     'Australia',
-    // Add more countries as needed
   ];
 
   List<String> continents = [
@@ -63,6 +60,30 @@ class PlaceProvider with ChangeNotifier {
 
   bool _submissionSuccessful = false;
   bool get submissionSuccessful => _submissionSuccessful;
+
+  // Search-related fields
+  String _searchQuery = '';
+  List<PlaceModel> get filteredPlaces {
+    if (_searchQuery.isEmpty) {
+      return _places;
+    } else {
+      return _places.where((place) {
+        final searchLower = _searchQuery.toLowerCase();
+        final activities = place.activities.toLowerCase().split(', ');
+
+        return place.name.toLowerCase().contains(searchLower) ||
+              //  place.description.toLowerCase().contains(searchLower) ||
+               place.country?.toLowerCase().contains(searchLower) == true ||
+               place.continent?.toLowerCase().contains(searchLower) == true ||
+               activities.any((activity) => activity.contains(searchLower));
+      }).toList();
+    }
+  }
+
+  void updateSearchQuery(String query) {
+    _searchQuery = query;
+    notifyListeners();
+  }
 
   Future<void> pickImages() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
