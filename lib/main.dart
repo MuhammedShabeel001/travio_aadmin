@@ -7,6 +7,7 @@ import 'package:travio_admin_/controller/user_provider.dart';
 import 'package:travio_admin_/core/common/widgets/navigation_bar.dart';
 import 'package:travio_admin_/controller/place_provider.dart';
 import 'package:travio_admin_/core/firebase/firebase_options.dart';
+import 'package:travio_admin_/view/pages/product/product_page.dart';
 // import 'package:travio_admin_/view/pages/dashboard/dashbord_page.dart';
 
 void main() async{
@@ -29,10 +30,11 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-        home: TNavBar(),
+        primarySwatch: Colors.orange,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+        // home: TNavBar(),
+        home: const ProductPage(),
       ),
     );
   }

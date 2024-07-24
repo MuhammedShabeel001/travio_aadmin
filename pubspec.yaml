@@ -22,6 +22,7 @@ dependencies:
   flutter_svg: ^2.0.10+1
   multiple_images_picker: ^1.0.1
   provider: ^6.1.2
+  shimmer: ^3.0.0
   svg_flutter: ^0.0.1
 
 dev_dependencies:

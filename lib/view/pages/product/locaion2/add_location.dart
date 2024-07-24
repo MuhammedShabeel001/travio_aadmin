@@ -2,7 +2,7 @@ import 'dart:developer';
 
 // import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:travio_admin_/view/pages/product/locaion/location_detail.dart';
+import 'package:travio_admin_/view/pages/product/locaion2/location_detail.dart';
 import 'package:travio_admin_/view/widgets/product/location/add_location_card.dart';
 // import 'package:travio_admin_/features/add/view/trip_packages/pages/package_detail.dart';
 

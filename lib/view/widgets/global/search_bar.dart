@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 class TSearchBar extends StatelessWidget {
   final TextEditingController controller;
   final ValueChanged<String> onChanged;
+  final String hint;
 
   const TSearchBar({
     required this.controller,
     required this.onChanged,
-    Key? key,
-  }) : super(key: key);
+    super.key, required this.hint,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class TSearchBar extends StatelessWidget {
       onChanged: onChanged,
       decoration: InputDecoration(
         prefixIcon: const Icon(Icons.search, color: Colors.orange),
-        hintText: 'Search by name or email',
+        hintText: hint,
         hintStyle: TextStyle(color: Colors.grey[600]),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),

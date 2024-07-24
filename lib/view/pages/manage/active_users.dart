@@ -25,6 +25,7 @@ class UsersPage extends StatelessWidget {
               Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: TSearchBar(
+                    hint: 'Search by name or email',
                       controller: userProvider.searchController,
                       onChanged:(value) {
                        userProvider.updateSearchQuery(value);
