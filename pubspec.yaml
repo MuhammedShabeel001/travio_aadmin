@@ -20,6 +20,7 @@ dependencies:
     sdk: flutter
   flutter_countries: ^1.0.2
   flutter_svg: ^2.0.10+1
+  flutter_typeahead: ^4.0.0
   multiple_images_picker: ^1.0.1
   provider: ^6.1.2
   shimmer: ^3.0.0

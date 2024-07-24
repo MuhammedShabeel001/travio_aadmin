@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:travio_admin/controller/place_provider.dart';
+import 'package:travio_admin/view/pages/product/location/add_location_page.dart';
 
 import '../../../widgets/global/search_bar.dart';
 import '../../../widgets/product/location/detail_card.dart';
@@ -76,6 +77,7 @@ class LocationPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Add location action
+          Navigator.push(context, MaterialPageRoute(builder: (context) => AddLocation(),));
         },
         backgroundColor: Colors.orange,
         tooltip: 'Add Location',

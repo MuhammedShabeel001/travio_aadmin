@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-// import 'package:travio_admin/controller/place_provider.dart';
-
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import '../../../../controller/place_provider.dart';
 
-class AddDetailsPage extends StatelessWidget {
-  const AddDetailsPage({super.key});
+class AddLocation extends StatelessWidget {
+  const AddLocation({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -61,68 +60,64 @@ class AddDetailsPage extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 16.0),
-                Row(
-                  children: [
-                    Expanded(
-                      child: DropdownButtonFormField<String>(
-                        decoration: InputDecoration(
-                          labelText: 'Country',
-                          filled: true,
-                          fillColor: Colors.grey[200],
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
-                        value: placeProvider.selectedCountry,
-                        items: placeProvider.countries.map((country) {
-                          return DropdownMenuItem(
-                            value: country,
-                            child: Text(country),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          placeProvider.selectedCountry = value;
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please select a country';
-                          }
-                          return null;
-                        },
+                TypeAheadFormField<String>(
+                  textFieldConfiguration: TextFieldConfiguration(
+                    decoration: InputDecoration(
+                      labelText: 'Country',
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: BorderSide.none,
                       ),
                     ),
-                    const SizedBox(width: 16.0),
-                    Expanded(
-                      child: DropdownButtonFormField<String>(
-                        decoration: InputDecoration(
-                          labelText: 'Continent',
-                          filled: true,
-                          fillColor: Colors.grey[200],
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
-                        value: placeProvider.selectedContinent,
-                        items: placeProvider.continents.map((continent) {
-                          return DropdownMenuItem(
-                            value: continent,
-                            child: Text(continent),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          placeProvider.selectedContinent = value;
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please select a continent';
-                          }
-                          return null;
-                        },
-                      ),
+                  ),
+                  suggestionsCallback: (pattern) {
+                    return placeProvider.countries.where((country) =>
+                        country.toLowerCase().contains(pattern.toLowerCase()));
+                  },
+                  itemBuilder: (context, suggestion) {
+                    return ListTile(
+                      title: Text(suggestion),
+                    );
+                  },
+                  onSuggestionSelected: (suggestion) {
+                    placeProvider.selectedCountry = suggestion;
+                  },
+                  validator: (value) {
+                    if (placeProvider.selectedCountry == null || placeProvider.selectedCountry!.isEmpty) {
+                      return 'Please select a country';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16.0),
+                DropdownButtonFormField<String>(
+                  decoration: InputDecoration(
+                    labelText: 'Continent',
+                    filled: true,
+                    fillColor: Colors.grey[200],
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: BorderSide.none,
                     ),
-                  ],
+                  ),
+                  value: placeProvider.selectedContinent,
+                  items: placeProvider.continents.map((continent) {
+                    return DropdownMenuItem(
+                      value: continent,
+                      child: Text(continent),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    placeProvider.selectedContinent = value;
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please select a continent';
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 16.0),
                 Wrap(

@@ -5,32 +5,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-// import 'package:travio_admin/model/place_model.dart';
 
 import '../model/place_model.dart';
 
 class PlaceProvider with ChangeNotifier {
   final FirebaseFirestore db = FirebaseFirestore.instance;
-    TextEditingController searchController = TextEditingController();
+  TextEditingController searchController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _newActivityController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String? selectedCountry;
   String? selectedContinent;
 
-  final List<String> availableActivities = [
-    'Hiking',
-    'Swimming',
-    'Sightseeing',
-    'Shopping',
-    'Dining',
-  ];
   List<String> selectedActivities = [];
 
   List<File> _images = [];
   final List<String> _uploadedImagesUrls = [];
 
-  List<String> countries = [
+  List<String> _countries = [
     'United States',
     'Canada',
     'Mexico',
@@ -39,7 +32,7 @@ class PlaceProvider with ChangeNotifier {
     'Australia',
   ];
 
-  List<String> continents = [
+  List<String> _continents = [
     'Asia',
     'Africa',
     'North America',
@@ -49,10 +42,23 @@ class PlaceProvider with ChangeNotifier {
     'Australia',
   ];
 
+  List<String> _availableActivities = [
+    'Hiking',
+    'Swimming',
+    'Sightseeing',
+    'Shopping',
+    'Dining',
+  ];
+
   TextEditingController get nameController => _nameController;
   TextEditingController get descriptionController => _descriptionController;
+  TextEditingController get newActivityController => _newActivityController;
   GlobalKey<FormState> get formKey => _formKey;
   List<File> get images => _images;
+
+  List<String> get countries => _countries;
+  List<String> get continents => _continents;
+  List<String> get availableActivities => _availableActivities;
 
   List<PlaceModel> _places = [];
   List<PlaceModel> get places => _places;
@@ -74,10 +80,9 @@ class PlaceProvider with ChangeNotifier {
         final activities = place.activities.toLowerCase().split(', ');
 
         return place.name.toLowerCase().contains(searchLower) ||
-              //  place.description.toLowerCase().contains(searchLower) ||
-               place.country.toLowerCase().contains(searchLower) == true ||
-               place.continent.toLowerCase().contains(searchLower) == true ||
-               activities.any((activity) => activity.contains(searchLower));
+            place.country.toLowerCase().contains(searchLower) == true ||
+            place.continent.toLowerCase().contains(searchLower) == true ||
+            activities.any((activity) => activity.contains(searchLower));
       }).toList();
     }
   }
@@ -85,6 +90,20 @@ class PlaceProvider with ChangeNotifier {
   void updateSearchQuery(String query) {
     _searchQuery = query;
     notifyListeners();
+  }
+
+  void addActivity(String activity) {
+    if (!_availableActivities.contains(activity)) {
+      _availableActivities.add(activity);
+      notifyListeners();
+    }
+  }
+
+  void addCountry(String country) {
+    if (!_countries.contains(country)) {
+      _countries.add(country);
+      notifyListeners();
+    }
   }
 
   Future<void> pickImages() async {
@@ -139,7 +158,7 @@ class PlaceProvider with ChangeNotifier {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Row(
-              children:  [
+              children: [
                 CircularProgressIndicator(),
                 SizedBox(width: 16.0),
                 Text("Submitting..."),
