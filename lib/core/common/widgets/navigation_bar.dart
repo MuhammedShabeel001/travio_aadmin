@@ -5,6 +5,7 @@ import 'package:travio_admin_/test_page.dart';
 import 'package:travio_admin_/view/pages/dashboard/dashbord_page.dart';
 import 'package:travio_admin_/view/pages/manage/active_users.dart';
 import 'package:travio_admin_/view/pages/product/locaion2/add_location.dart';
+import 'package:travio_admin_/view/pages/product/product_page.dart';
 
 class TNavBar extends StatefulWidget {
   const TNavBar({super.key});
@@ -19,7 +20,7 @@ class _TNavBarState extends State<TNavBar> {
   final List<Widget> _pages = [
     const DashbordPage(),
     const UsersPage(),
-    const AddLocationPage(),
+    const ProductPage(),
     const Page4(),
   ];
 
