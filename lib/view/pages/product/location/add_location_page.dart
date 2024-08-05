@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import '../../../../controller/place_provider.dart';
+import '../../../../utils/consts/constants.dart';
 
 class AddLocation extends StatelessWidget {
   const AddLocation({super.key});
@@ -61,10 +62,10 @@ class AddLocation extends StatelessWidget {
                         ),
                         labelStyle: TextStyle(color: Colors.orange[700]), // Darker orange label
                       ),
-                      controller: TextEditingController(text: placeProvider.selectedCountry),
+                      controller: placeProvider.countryController,
                     ),
                     suggestionsCallback: (pattern) {
-                      return placeProvider.countries.where((country) =>
+                      return countries.where((country) =>
                           country.toLowerCase().contains(pattern.toLowerCase()));
                     },
                     itemBuilder: (context, suggestion) {
@@ -73,6 +74,7 @@ class AddLocation extends StatelessWidget {
                       );
                     },
                     onSuggestionSelected: (suggestion) {
+                      placeProvider.countryController.text = suggestion;
                       placeProvider.selectedCountry = suggestion;
                       placeProvider.notifyListeners();
                     },
@@ -96,10 +98,10 @@ class AddLocation extends StatelessWidget {
                         ),
                         labelStyle: TextStyle(color: Colors.orange[700]), // Darker orange label
                       ),
-                      controller: TextEditingController(text: placeProvider.selectedContinent),
+                      controller: placeProvider.continentController,
                     ),
                     suggestionsCallback: (pattern) {
-                      return placeProvider.continents.where((continent) =>
+                      return continents.where((continent) =>
                           continent.toLowerCase().contains(pattern.toLowerCase()));
                     },
                     itemBuilder: (context, suggestion) {
@@ -108,6 +110,7 @@ class AddLocation extends StatelessWidget {
                       );
                     },
                     onSuggestionSelected: (suggestion) {
+                      placeProvider.continentController.text = suggestion;
                       placeProvider.selectedContinent = suggestion;
                       placeProvider.notifyListeners();
                     },
@@ -171,13 +174,75 @@ class AddLocation extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 16.0),
+                  const Text(
+                    'Images',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 120,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          ...placeProvider.images.asMap().entries.map((entry) {
+                            final index = entry.key;
+                            final image = entry.value;
+                            return Stack(
+                              children: [
+                                Container(
+                                  margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                                  child: Image.file(
+                                    image,
+                                    width: 100, // Fixed width for images
+                                    height: 100, // Fixed height for images
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                Positioned(
+                                  right: -5,
+                                  top: -10 ,
+                                  child: IconButton(
+                                    icon: const Icon(Icons.remove_circle, color: Colors.red),
+                                    onPressed: () {
+                                      placeProvider.removeImage(index);
+                                    },
+                                  ),
+                                ),
+                              ],
+                            );
+                          }),
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                style: BorderStyle.solid
+                              )
+                            ),
+                            height: 100,
+                            width: 100,
+                            child: Center(
+                              child: IconButton(
+                                icon: const Icon(Icons.add_a_photo),
+                                onPressed: () async {
+                                  await placeProvider.pickImages();
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
                   ElevatedButton(
-                    onPressed: () {
-                      if (placeProvider.formKey.currentState!.validate()) {
-                        placeProvider.submitForm(context);
-                      }
+                    onPressed: placeProvider.isSubmitting ? null : () {
+                      placeProvider.submitForm(context);
                     },
-                    child: const Text('Submit'),
+                    child: placeProvider.isSubmitting 
+                        ? const CircularProgressIndicator() 
+                        : const Text('Submit'),
                   ),
                 ],
               ),

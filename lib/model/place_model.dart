@@ -1,13 +1,11 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
-
 class PlaceModel {
-  String id;
-  String name;
-  String description;
-  String country;
-  String continent;
-  String activities;
-  List<String> images;
+  final String id;
+  final String name;
+  final String description;
+  final String country;
+  final String continent;
+  final String activities;
+  final List<String> images;
 
   PlaceModel({
     required this.id,

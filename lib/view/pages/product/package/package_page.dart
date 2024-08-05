@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travio_admin/view/pages/product/package/add_package_page.dart';
 
 import '../../../widgets/global/search_bar.dart';
 
@@ -27,7 +28,7 @@ class PackagePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Add package action
+          Navigator.push(context, MaterialPageRoute(builder: (context) => AddTripPackagePage(),));
         },
         backgroundColor: Colors.orange,
         tooltip: 'Add Package', // Customize the button color

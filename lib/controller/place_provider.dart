@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:travio_admin/utils/consts/constants.dart';
 
 import '../model/place_model.dart';
 
@@ -14,33 +15,17 @@ class PlaceProvider with ChangeNotifier {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _newActivityController = TextEditingController();
+  final TextEditingController countryController = TextEditingController();
+  final TextEditingController continentController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String? selectedCountry;
   String? selectedContinent;
+  bool _isSubmitting = false;
 
   List<String> selectedActivities = [];
 
   List<File> _images = [];
   final List<String> _uploadedImagesUrls = [];
-
-  List<String> _countries = [
-    'United States',
-    'Canada',
-    'Mexico',
-    'India',
-    'China',
-    'Australia',
-  ];
-
-  List<String> _continents = [
-    'Asia',
-    'Africa',
-    'North America',
-    'South America',
-    'Antarctica',
-    'Europe',
-    'Australia',
-  ];
 
   List<String> _availableActivities = [
     'Hiking',
@@ -55,9 +40,8 @@ class PlaceProvider with ChangeNotifier {
   TextEditingController get newActivityController => _newActivityController;
   GlobalKey<FormState> get formKey => _formKey;
   List<File> get images => _images;
+  bool get isSubmitting => _isSubmitting;
 
-  List<String> get countries => _countries;
-  List<String> get continents => _continents;
   List<String> get availableActivities => _availableActivities;
 
   List<PlaceModel> _places = [];
@@ -69,7 +53,6 @@ class PlaceProvider with ChangeNotifier {
   bool _submissionSuccessful = false;
   bool get submissionSuccessful => _submissionSuccessful;
 
-  // Search-related fields
   String _searchQuery = '';
   List<PlaceModel> get filteredPlaces {
     if (_searchQuery.isEmpty) {
@@ -100,20 +83,19 @@ class PlaceProvider with ChangeNotifier {
   }
 
   void addCountry(String country) {
-    if (!_countries.contains(country)) {
-      _countries.add(country);
+    if (!countries.contains(country)) {
+      countries.add(country);
       notifyListeners();
     }
   }
 
   Future<void> pickImages() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.image,
+    final result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
+      type: FileType.image,
     );
-
     if (result != null) {
-      _images = result.paths.map((path) => File(path!)).toList();
+      images.addAll(result.files.map((file) => File(file.path!)).toList());
       notifyListeners();
     }
   }
@@ -137,7 +119,8 @@ class PlaceProvider with ChangeNotifier {
   Future<void> _uploadImages() async {
     for (var image in _images) {
       final fileName = DateTime.now().millisecondsSinceEpoch.toString();
-      final ref = FirebaseStorage.instance.ref().child('place_images').child(fileName);
+      final ref =
+          FirebaseStorage.instance.ref().child('place_images').child(fileName);
       final uploadTask = ref.putFile(image);
       final snapshot = await uploadTask.whenComplete(() {});
       final url = await snapshot.ref.getDownloadURL();
@@ -146,63 +129,57 @@ class PlaceProvider with ChangeNotifier {
   }
 
   Future<void> submitForm(BuildContext context) async {
-    _submissionSuccessful = false;
+    _isSubmitting = true;
+    notifyListeners();
 
-    if (_nameController.text.isNotEmpty &&
-        _descriptionController.text.isNotEmpty &&
-        selectedCountry != null &&
-        selectedContinent != null &&
-        selectedActivities.isNotEmpty &&
-        _images.isNotEmpty) {
+    if (_formKey.currentState?.validate() ?? false) {
       try {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Row(
-              children: [
-                CircularProgressIndicator(),
-                SizedBox(width: 16.0),
-                Text("Submitting..."),
-              ],
-            ),
-          ),
-        );
-
         await _uploadImages();
 
-        DocumentReference docRef = FirebaseFirestore.instance.collection('places').doc();
+        DocumentReference docRef =
+            FirebaseFirestore.instance.collection('places').doc();
         String placeId = docRef.id;
 
         await docRef.set({
           'id': placeId,
           'name': _nameController.text,
           'description': _descriptionController.text,
-          'country': selectedCountry,
-          'continent': selectedContinent,
+          'country': countryController.text,
+          'continent': continentController.text,
           'activities': selectedActivities.join(', '),
           'image_urls': _uploadedImagesUrls,
         });
 
-        // Fetch the new place and add it to the list
         DocumentSnapshot locationDoc = await docRef.get();
-        PlaceModel newPlace = PlaceModel.fromMap(locationDoc.data() as Map<String, dynamic>);
+        PlaceModel newPlace =
+            PlaceModel.fromMap(locationDoc.data() as Map<String, dynamic>);
         _places.add(newPlace);
 
         _nameController.clear();
         _descriptionController.clear();
-        selectedCountry = null;
-        selectedContinent = null;
+        countryController.clear();
+        continentController.clear();
         selectedActivities.clear();
-        _images = [];
+        _images.clear();
         _uploadedImagesUrls.clear();
-        _submissionSuccessful = true;
-        notifyListeners();
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Submission Successful')),
+        );
       } catch (e) {
         log('Error uploading data: $e');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Error submitting data')),
+        );
       } finally {
+        _isSubmitting = false;
+        notifyListeners();
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
       }
+    } else {
+      _isSubmitting = false;
+      notifyListeners();
     }
-    notifyListeners();
   }
 
   Future<void> fetchAllLocations() async {
