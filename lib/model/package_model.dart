@@ -1,62 +1,59 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-
-class PackageModel {
+class TripPackageModel {
   String id;
   String name;
   String description;
-  String locationId1;
-  String locationId2;
-  DateTime? startDate;
-  DateTime? endDate;
-  int days;
-  String nights;
-  String morning;
   List<String> images;
-  String country;
-  String continent;
-  String activities;
-  String transportOptions;
-  double price;
+  Map<int, String> dailyPlan; // Plan for each day
+  double realPrice;
   double offerPrice;
+  List<String> activities;
+  List<String> transportOptions;
+  int numberOfDays;
+  int numberOfNights;
+  int totalDays;
+  List<String>? customerReviews; // Nullable customer reviews
+  int bookedCount;
+  int likeCount;
 
-  PackageModel({
+  TripPackageModel({
     required this.id,
     required this.name,
     required this.description,
-    required this.locationId1,
-    required this.locationId2,
-    this.startDate,
-    this.endDate,
-    required this.days,
-    required this.nights,
-    required this.morning,
     required this.images,
-    required this.country,
-    required this.continent,
+    required this.dailyPlan,
+    required this.realPrice,
+    required this.offerPrice,
     required this.activities,
     required this.transportOptions,
-    required this.price,
-    required this.offerPrice,
+    required this.numberOfDays,
+    required this.numberOfNights,
+    required this.totalDays,
+    this.customerReviews,
+    this.bookedCount = 0,
+    this.likeCount = 0,
   });
 
-  factory PackageModel.fromMap(Map<String, dynamic> map) {
-    return PackageModel(
+  factory TripPackageModel.fromMap(Map<String, dynamic> map) {
+    return TripPackageModel(
       id: map['id'] as String,
       name: map['name'] as String,
       description: map['description'] as String,
-      locationId1: map['loaction_id_1'] as String,
-      locationId2: map['location_id_2'] as String,
-      days: map['days'] as int,
-      nights: map['nights'] as String,
-      morning: map['mornings'] as String,
       images: List<String>.from(map['images'] as List),
-      country: map['country'] as String,
-      continent: map['continent'] as String,
-      activities: map['activities'] as String,
-      transportOptions: map['transport_options'] as String,
-      price: map['price'] as double,
+      dailyPlan: Map<int, String>.from(map['daily_plan'] as Map),
+      realPrice: map['real_price'] as double,
       offerPrice: map['offer_price'] as double,
+      activities: List<String>.from(map['activities'] as List),
+      transportOptions: List<String>.from(map['transport_options'] as List),
+      numberOfDays: map['number_of_days'] as int,
+      numberOfNights: map['number_of_nights'] as int,
+      customerReviews: map['customer_reviews'] != null 
+          ? List<String>.from(map['customer_reviews'] as List)
+          : null,
+      bookedCount: map['booked_count'] as int? ?? 0,
+      likeCount: map['like_count'] as int? ?? 0,
+       totalDays: map['total_number_of_days'] as int,
     );
   }
 
@@ -65,18 +62,18 @@ class PackageModel {
       'id': id,
       'name': name,
       'description': description,
-      'location_id_1': locationId1,
-      'location_id_2': locationId2,
-      'days': days,
-      'nights': nights,
-      'mornings': morning,
       'images': images,
-      'transport_options': transportOptions,
-      'country': country,
-      'continent': continent,
+      'daily_plan': dailyPlan,
+      'real_price': realPrice,
+      'offer_price': offerPrice,
       'activities': activities,
-      'price': price,
-      'offer_price': offerPrice
+      'transport_options': transportOptions,
+      'number_of_days': numberOfDays,
+      'number_of_nights': numberOfNights,
+      'customer_reviews': customerReviews,
+      'booked_count': bookedCount,
+      'like_count': likeCount,
+      'total_number_of_days': totalDays
     };
   }
 }

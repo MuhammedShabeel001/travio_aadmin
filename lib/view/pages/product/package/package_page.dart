@@ -28,7 +28,7 @@ class PackagePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => AddTripPackagePage(),));
+          // Navigator.push(context, MaterialPageRoute(builder: (context) => AddTripPackagePage(),));
         },
         backgroundColor: Colors.orange,
         tooltip: 'Add Package', // Customize the button color

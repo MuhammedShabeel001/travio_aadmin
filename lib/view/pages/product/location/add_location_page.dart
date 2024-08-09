@@ -26,7 +26,7 @@ class AddLocation extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildTextField(
+                  buildTextField(
                     context,
                     controller: placeProvider.nameController,
                     label: 'Place Name',
@@ -38,7 +38,7 @@ class AddLocation extends StatelessWidget {
                     },
                   ),
                   const SizedBox(height: 16.0),
-                  _buildTextField(
+                  buildTextField(
                     context,
                     controller: placeProvider.descriptionController,
                     label: 'Description',
@@ -243,7 +243,7 @@ class AddLocation extends StatelessWidget {
                     child: placeProvider.isSubmitting 
                         ? const CircularProgressIndicator() 
                         : const Text('Submit'),
-                  ),
+                  ),  
                 ],
               ),
             ),
@@ -253,7 +253,7 @@ class AddLocation extends StatelessWidget {
     );
   }
 
-  Widget _buildTextField(
+  Widget buildTextField(
     BuildContext context, {
     required TextEditingController controller,
     required String label,
