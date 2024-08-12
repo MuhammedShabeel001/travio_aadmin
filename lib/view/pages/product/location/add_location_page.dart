@@ -1,6 +1,8 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:travio_admin/view/widgets/global/custom_loading.dart';
 import '../../../../controller/place_provider.dart';
 import '../../../../utils/consts/constants.dart';
 
@@ -16,239 +18,296 @@ class AddLocation extends StatelessWidget {
         title: const Text('Add Details'),
         backgroundColor: Colors.orangeAccent,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(), // Unfocus keyboard on tap
-          child: Form(
-            key: placeProvider.formKey,
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  buildTextField(
-                    context,
-                    controller: placeProvider.nameController,
-                    label: 'Place Name',
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a place name';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16.0),
-                  buildTextField(
-                    context,
-                    controller: placeProvider.descriptionController,
-                    label: 'Description',
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a description';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16.0),
-                  TypeAheadFormField<String>(
-                    textFieldConfiguration: TextFieldConfiguration(
-                      decoration: InputDecoration(
-                        labelText: 'Country',
-                        filled: true,
-                        fillColor: Colors.orange[50], // Light orange background
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                          borderSide: BorderSide.none,
+      body: Column(
+
+        children: [
+          Expanded(
+            child: Padding(
+              // padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+            
+              child: GestureDetector(
+                onTap: () => FocusScope.of(context).unfocus(), // Unfocus keyboard on tap
+                child: Form(
+                  key: placeProvider.formKey,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                                height: 16,
+                              ),
+                        buildTextField(
+                          context,
+                          controller: placeProvider.nameController,
+                          label: 'Place Name',
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter a place name';
+                            }
+                            return null;
+                          },
                         ),
-                        labelStyle: TextStyle(color: Colors.orange[700]), // Darker orange label
-                      ),
-                      controller: placeProvider.countryController,
-                    ),
-                    suggestionsCallback: (pattern) {
-                      return countries.where((country) =>
-                          country.toLowerCase().contains(pattern.toLowerCase()));
-                    },
-                    itemBuilder: (context, suggestion) {
-                      return ListTile(
-                        title: Text(suggestion),
-                      );
-                    },
-                    onSuggestionSelected: (suggestion) {
-                      placeProvider.countryController.text = suggestion;
-                      placeProvider.selectedCountry = suggestion;
-                      placeProvider.notifyListeners();
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please select a country';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16.0),
-                  TypeAheadFormField<String>(
-                    textFieldConfiguration: TextFieldConfiguration(
-                      decoration: InputDecoration(
-                        labelText: 'Continent',
-                        filled: true,
-                        fillColor: Colors.orange[50], // Light orange background
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                          borderSide: BorderSide.none,
+                        const SizedBox(height: 16.0),
+                        buildTextField(
+                          context,
+                          controller: placeProvider.descriptionController,
+                          label: 'Description',
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter a description';
+                            }
+                            return null;
+                          },
                         ),
-                        labelStyle: TextStyle(color: Colors.orange[700]), // Darker orange label
-                      ),
-                      controller: placeProvider.continentController,
-                    ),
-                    suggestionsCallback: (pattern) {
-                      return continents.where((continent) =>
-                          continent.toLowerCase().contains(pattern.toLowerCase()));
-                    },
-                    itemBuilder: (context, suggestion) {
-                      return ListTile(
-                        title: Text(suggestion),
-                      );
-                    },
-                    onSuggestionSelected: (suggestion) {
-                      placeProvider.continentController.text = suggestion;
-                      placeProvider.selectedContinent = suggestion;
-                      placeProvider.notifyListeners();
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please select a continent';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16.0),
-                  const Text(
-                    'Activities',
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Wrap(
-                    spacing: 8.0,
-                    runSpacing: 8.0,
-                    children: placeProvider.availableActivities.map((activity) {
-                      return ChoiceChip(
-                        label: Text(activity),
-                        selected: placeProvider.selectedActivities.contains(activity),
-                        onSelected: (selected) {
-                          placeProvider.toggleActivity(activity);
-                        },
-                        selectedColor: Colors.orangeAccent,
-                      );
-                    }).toList(),
-                  ),
-                  const SizedBox(height: 16.0),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextFormField(
-                          controller: placeProvider.newActivityController,
-                          decoration: InputDecoration(
-                            labelText: 'Add New Activity',
-                            filled: true,
-                            fillColor: Colors.orange[50], // Light orange background
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                              borderSide: BorderSide.none,
+                        const SizedBox(height: 16.0),
+                        TypeAheadFormField<String>(
+                          textFieldConfiguration: TextFieldConfiguration(
+                            decoration: InputDecoration(
+                              labelText: 'Country',
+                              filled: true,
+                              fillColor: Colors.orange[50], // Light orange background
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                                borderSide: BorderSide.none,
+                              ),
+                              labelStyle: TextStyle(color: Colors.orange[700]), // Darker orange label
                             ),
-                            labelStyle: TextStyle(color: Colors.orange[700]), // Darker orange label
+                            controller: placeProvider.countryController,
+                          ),
+                          suggestionsCallback: (pattern) {
+                            return countries.where((country) =>
+                                country.toLowerCase().contains(pattern.toLowerCase()));
+                          },
+                          itemBuilder: (context, suggestion) {
+                            return ListTile(
+                              title: Text(suggestion),
+                            );
+                          },
+                          onSuggestionSelected: (suggestion) {
+                            placeProvider.countryController.text = suggestion;
+                            placeProvider.selectedCountry = suggestion;
+                            placeProvider.notifyListeners();
+                          },
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please select a country';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 16.0),
+                        TypeAheadFormField<String>(
+                          textFieldConfiguration: TextFieldConfiguration(
+                            decoration: InputDecoration(
+                              labelText: 'Continent',
+                              filled: true,
+                              fillColor: Colors.orange[50], // Light orange background
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                                borderSide: BorderSide.none,
+                              ),
+                              labelStyle: TextStyle(color: Colors.orange[700]), // Darker orange label
+                            ),
+                            controller: placeProvider.continentController,
+                          ),
+                          suggestionsCallback: (pattern) {
+                            return continents.where((continent) =>
+                                continent.toLowerCase().contains(pattern.toLowerCase()));
+                          },
+                          itemBuilder: (context, suggestion) {
+                            return ListTile(
+                              title: Text(suggestion),
+                            );
+                          },
+                          onSuggestionSelected: (suggestion) {
+                            placeProvider.continentController.text = suggestion;
+                            placeProvider.selectedContinent = suggestion;
+                            placeProvider.notifyListeners();
+                          },
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please select a continent';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 16.0),
+                        const Text(
+                          'Activities',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.add),
-                        onPressed: () {
-                          final newActivity = placeProvider.newActivityController.text.trim();
-                          if (newActivity.isNotEmpty) {
-                            placeProvider.addActivity(newActivity);
-                            placeProvider.newActivityController.clear();
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16.0),
-                  const Text(
-                    'Images',
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 120,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          ...placeProvider.images.asMap().entries.map((entry) {
-                            final index = entry.key;
-                            final image = entry.value;
-                            return Stack(
-                              children: [
-                                Container(
-                                  margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                                  child: Image.file(
-                                    image,
-                                    width: 100, // Fixed width for images
-                                    height: 100, // Fixed height for images
-                                    fit: BoxFit.cover,
+                        Wrap(
+                          spacing: 8.0,
+                          runSpacing: 8.0,
+                          children: placeProvider.availableActivities.map((activity) {
+                            return ChoiceChip(
+                              label: Text(activity),
+                              selected: placeProvider.selectedActivities.contains(activity),
+                              onSelected: (selected) {
+                                placeProvider.toggleActivity(activity);
+                              },
+                              selectedColor: Colors.orangeAccent,
+                            );
+                          }).toList(),
+                        ),
+                        const SizedBox(height: 16.0),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                controller: placeProvider.newActivityController,
+                                decoration: InputDecoration(
+                                  labelText: 'Add New Activity',
+                                  filled: true,
+                                  fillColor: Colors.orange[50], // Light orange background
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    borderSide: BorderSide.none,
                                   ),
+                                  labelStyle: TextStyle(color: Colors.orange[700]), // Darker orange label
                                 ),
-                                Positioned(
-                                  right: -5,
-                                  top: -10 ,
-                                  child: IconButton(
-                                    icon: const Icon(Icons.remove_circle, color: Colors.red),
-                                    onPressed: () {
-                                      placeProvider.removeImage(index);
-                                    },
+                              ),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.add),
+                              onPressed: () {
+                                final newActivity = placeProvider.newActivityController.text.trim();
+                                if (newActivity.isNotEmpty) {
+                                  placeProvider.addActivity(newActivity);
+                                  placeProvider.newActivityController.clear();
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16.0),
+                        const Text(
+                          'Images',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 120,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: [
+                                ...placeProvider.images.asMap().entries.map((entry) {
+                                  final index = entry.key;
+                                  final image = entry.value;
+                                  return Stack(
+                                    children: [
+                                      Container(
+                                        margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                                        child: Image.file(
+                                          image,
+                                          width: 100, // Fixed width for images
+                                          height: 100, // Fixed height for images
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      Positioned(
+                                        right: -5,
+                                        top: -10 ,
+                                        child: IconButton(
+                                          icon: const Icon(Icons.remove_circle, color: Colors.red),
+                                          onPressed: () {
+                                            placeProvider.removeImage(index);
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                }),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      style: BorderStyle.solid
+                                    )
+                                  ),
+                                  height: 100,
+                                  width: 100,
+                                  child: Center(
+                                    child: IconButton(
+                                      icon: const Icon(Icons.add_a_photo),
+                                      onPressed: () async {
+                                        await placeProvider.pickImages();
+                                      },
+                                    ),
                                   ),
                                 ),
                               ],
-                            );
-                          }),
-                          Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                style: BorderStyle.solid
-                              )
-                            ),
-                            height: 100,
-                            width: 100,
-                            child: Center(
-                              child: IconButton(
-                                icon: const Icon(Icons.add_a_photo),
-                                onPressed: () async {
-                                  await placeProvider.pickImages();
-                                },
-                              ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                        // const SizedBox(height: 16.0),
+                        
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 16.0),
-                  ElevatedButton(
-                    onPressed: placeProvider.isSubmitting ? null : () {
-                      placeProvider.submitForm(context);
-                    },
-                    child: placeProvider.isSubmitting 
-                        ? const CircularProgressIndicator() 
-                        : const Text('Submit'),
-                  ),  
-                ],
+                ),
               ),
             ),
           ),
-        ),
+ Padding(
+   padding: const EdgeInsets.all(8.0),
+   child: ElevatedButton(
+    onPressed: () {
+      if (placeProvider.formKey.currentState?.validate() ??
+                    false) {
+                  if (placeProvider.selectedActivities.isEmpty) {
+                    BotToast.showText(
+                        text: 'Please select at least one activity.');
+
+                    return;
+                  }
+
+                  if (placeProvider.images.isEmpty){
+                    BotToast.showText(text: 'Please select at least one image');
+
+                    return;
+                  }
+
+                  // if (placeProvider.selectedTransportOp.isEmpty) {
+                  //   BotToast.showText(
+                  //       text: 'Please select at least  one transport option.');
+
+                  //   return;
+                  // }
+                placeProvider.submitForm();
+                //   Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (_) => TripPackagePlanningPage()),
+                //   );
+                }
+    },
+                            // onPressed: placeProvider.isSubmitting ? null : () {
+
+                              
+                            //   // placeProvider.submitForm();
+                            // },
+                            child: placeProvider.isSubmitting 
+                                ? const CustomLoading()
+                                : const Text('Submit',
+                  style: TextStyle(color: Colors.white),
+                                
+                                ),
+
+                                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orangeAccent,
+                  minimumSize: const Size(double.infinity, 50),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15))),
+                          ),
+ ), 
+        ],
       ),
     );
   }
@@ -261,8 +320,11 @@ class AddLocation extends StatelessWidget {
   }) {
     return TextFormField(
       controller: controller,
+      maxLines: 5,
+      minLines: 1,
       decoration: InputDecoration(
         labelText: label,
+        
         filled: true,
         fillColor: Colors.orange[50], // Light orange background
         border: OutlineInputBorder(

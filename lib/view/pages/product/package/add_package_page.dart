@@ -209,6 +209,8 @@ class TripPackageDetailsPage extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+                        const SizedBox(height: 16.0),
+
                         Row(
                           children: [
                             Flexible(
@@ -258,6 +260,9 @@ class TripPackageDetailsPage extends StatelessWidget {
               onPressed: () {
                 if (tripPackageProvider.formKey.currentState?.validate() ??
                     false) {
+
+
+
                   if (tripPackageProvider.selectedActivities.isEmpty) {
                     BotToast.showText(
                         text: 'Please select at least one activity.');

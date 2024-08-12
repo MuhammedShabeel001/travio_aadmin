@@ -129,7 +129,7 @@ class PlaceProvider with ChangeNotifier {
     }
   }
 
-  Future<void> submitForm(BuildContext context) async {
+  Future<void> submitForm() async {
     _isSubmitting = true;
     notifyListeners();
 
@@ -165,6 +165,7 @@ class PlaceProvider with ChangeNotifier {
         _uploadedImagesUrls.clear();
 
         BotToast.showText(text: 'Submission Successful');
+        
       } catch (e) {
         log('Error uploading data: $e');
         BotToast.showText(text: 'Error submitting data');

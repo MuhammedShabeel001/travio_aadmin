@@ -36,24 +36,40 @@ class TripPackageModel {
   });
 
   factory TripPackageModel.fromMap(Map<String, dynamic> map) {
+    // Safely handle the dailyPlan field which might be a List or a Map
+    final dailyPlanData = map['daily_plan'];
+
+    // Check if dailyPlanData is a Map or List and handle accordingly
+    Map<int, String> dailyPlan = {};
+    if (dailyPlanData is Map<String, dynamic>) {
+      dailyPlan = dailyPlanData.map(
+        (key, value) => MapEntry(int.tryParse(key) ?? 0, value as String),
+      );
+    } else if (dailyPlanData is List<dynamic>) {
+      // Handle if it's a List; convert list items to Map<int, String> if possible
+      for (int i = 0; i < dailyPlanData.length; i++) {
+        dailyPlan[i] = dailyPlanData[i] as String;
+      }
+    }
+
     return TripPackageModel(
       id: map['id'] as String,
       name: map['name'] as String,
       description: map['description'] as String,
-      images: List<String>.from(map['images'] as List),
-      dailyPlan: Map<int, String>.from(map['daily_plan'] as Map),
-      realPrice: map['real_price'] as double,
-      offerPrice: map['offer_price'] as double,
-      activities: List<String>.from(map['activities'] as List),
-      transportOptions: List<String>.from(map['transport_options'] as List),
+      images: List<String>.from(map['images'] as List<dynamic>),
+      dailyPlan: dailyPlan,
+      realPrice: (map['real_price'] as num).toDouble(),
+      offerPrice: (map['offer_price'] as num).toDouble(),
+      activities: List<String>.from(map['activities'] as List<dynamic>),
+      transportOptions: List<String>.from(map['transport_options'] as List<dynamic>),
       numberOfDays: map['number_of_days'] as int,
       numberOfNights: map['number_of_nights'] as int,
-      customerReviews: map['customer_reviews'] != null 
-          ? List<String>.from(map['customer_reviews'] as List)
+      customerReviews: map['customer_reviews'] != null
+          ? List<String>.from(map['customer_reviews'] as List<dynamic>)
           : null,
       bookedCount: map['booked_count'] as int? ?? 0,
       likeCount: map['like_count'] as int? ?? 0,
-       totalDays: map['total_number_of_days'] as int,
+      totalDays: map['total_number_of_days'] as int,
     );
   }
 

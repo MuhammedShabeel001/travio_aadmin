@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
@@ -132,24 +133,28 @@ class TripPackagePlanningPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
-              onPressed: tripPackageProvider.isSubmitting
-                  ? null
-                  : () {
-                      tripPackageProvider.submitForm(context);
-                    },
-              child: tripPackageProvider.isSubmitting
-                  ? CustomLoading()
-                  : 
+              onPressed:() {
+if (tripPackageProvider.formKey.currentState?.validate() ?? false) {
+   if (tripPackageProvider.images.isEmpty){
+                    BotToast.showText(text: 'Please select at least one image');
 
-              Text(
-                  'Submit',
-                  style: TextStyle(color: Colors.white),
-                ),
+                    return;
+                  }
+}
+
+                      tripPackageProvider.submitForm();
+                    },
               style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orangeAccent,
                   minimumSize: const Size(double.infinity, 50),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15))),
+              child: tripPackageProvider.isSubmitting
+                  ? CustomLoading()
+                  : Text(
+                      'Submit',
+                      style: TextStyle(color: Colors.white),
+                    ),
             ),
           ),
         ],
@@ -159,3 +164,6 @@ class TripPackagePlanningPage extends StatelessWidget {
 }
 
 
+//if (tripPackageProvider.images.isEmpty){
+               //     BotToast.showText(text: 'Please select at least one image');
+                //  }

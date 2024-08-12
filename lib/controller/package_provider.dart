@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:bot_toast/bot_toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,7 @@ import 'package:travio_admin/model/package_model.dart';
 class TripPackageProvider with ChangeNotifier {
   final FirebaseFirestore db = FirebaseFirestore.instance;
 
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
@@ -27,7 +28,7 @@ class TripPackageProvider with ChangeNotifier {
   List<File> images = [];
   List<String> selectedActivities = [];
   List<String> selectedTransportOptions = [];
-  bool isSubmitting = false;
+  bool _isSubmitting = false;
   final List<String> _uploadedImagesUrls = [];
 
   int _currentIndex = 0;
@@ -36,6 +37,8 @@ class TripPackageProvider with ChangeNotifier {
   TextEditingController get newActivityController => _newActivityController;
   List<String> get availableActivities => _availableActivities;
   List<String> get transportOptions => _transportOptions;
+  GlobalKey<FormState> get formKey => _formKey;
+  bool get isSubmitting => _isSubmitting;
 
   List<TripPackageModel> _package = [];
   List<TripPackageModel> get package => _package;
@@ -79,44 +82,6 @@ class TripPackageProvider with ChangeNotifier {
   void removeImage(int index) {
     images.removeAt(index);
     notifyListeners();
-  }
-
-  Future<void> submitForm(BuildContext context) async {
-    isSubmitting = true;
-    notifyListeners();
-
-    if (formKey.currentState?.validate() ?? false) {
-      try {
-        await _uploadImages();
-
-        DocumentReference docRef =
-            FirebaseFirestore.instance.collection('trip_packages').doc();
-        String packageId = docRef.id;
-
-        await docRef.set({
-          'id': packageId,
-          'name': nameController.text,
-          'description': descriptionController.text,
-          'images': _uploadedImagesUrls,
-          'daily_plan': dailyPlanningControllers
-              .map((controller) => controller.text)
-              .toList(),
-          'real_price': double.tryParse(realPriceController.text) ?? 0.0,
-          'offer_price': double.tryParse(offerPriceController.text) ?? 0.0,
-          'activities': selectedActivities,
-          'transport_options': selectedTransportOptions,
-          'number_of_days': int.tryParse(daysController.text) ?? 0,
-          'number_of_nights': int.tryParse(nightsController.text) ?? 0,
-          'total_number_of_days': totalDays
-        });
-
-        DocumentSnapshot packageDoc = await docRef.get();
-        TripPackageModel newPackage =
-            TripPackageModel.fromMap(packageDoc.data() as Map<String, dynamic>);
-        _package.add(newPackage);
-        _resetForm();
-      } catch (e) {}
-    }
   }
 
   void addActivity(String activity) {
@@ -167,14 +132,17 @@ class TripPackageProvider with ChangeNotifier {
   Future<void> fetchAllPackages() async {
     try {
       QuerySnapshot tripPackageSnapshot =
-          await db.collection('trip_package').get();
+          await db.collection('trip_packages').get();
+
       _package = tripPackageSnapshot.docs
           .map((doc) =>
               TripPackageModel.fromMap(doc.data() as Map<String, dynamic>))
           .toList();
+
       notifyListeners();
     } catch (e) {
-      log('Error fetching location data: $e');
+      log('Error fetching package data: $e');
+      BotToast.showText(text: 'Error fetching package data');
     }
   }
 
@@ -184,16 +152,66 @@ class TripPackageProvider with ChangeNotifier {
   }
 
   Future<void> _uploadImages() async {
-    for (var image in images) {
+    final List<Future<String>> uploadFutures = images.map((image) async {
       final fileName = DateTime.now().millisecondsSinceEpoch.toString();
       final ref = FirebaseStorage.instance
           .ref()
           .child('trip_package_images')
           .child(fileName);
-      final uploadTask = ref.putFile(image);
-      final snapshot = await uploadTask.whenComplete(() {});
-      final url = await snapshot.ref.getDownloadURL();
-      _uploadedImagesUrls.add(url);
+      final snapshot = await ref.putFile(image).whenComplete(() {});
+      return await snapshot.ref.getDownloadURL();
+    }).toList();
+
+    _uploadedImagesUrls.addAll(await Future.wait(uploadFutures));
+  }
+
+  Future<void> submitForm() async {
+    _isSubmitting = true;
+    notifyListeners();
+
+    if (formKey.currentState?.validate() ?? false) {
+      try {
+        await _uploadImages();
+
+        DocumentReference docRef =
+            FirebaseFirestore.instance.collection('trip_packages').doc();
+        String packageId = docRef.id;
+
+        Map<int, String> dailyPlanMap = {};
+        for (int i = 0; i < dailyPlanningControllers.length; i++) {
+          dailyPlanMap[i] = dailyPlanningControllers[i].text;
+        }
+
+        await docRef.set({
+          'id': packageId,
+          'name': nameController.text,
+          'description': descriptionController.text,
+          'images': _uploadedImagesUrls,
+          'daily_plan': dailyPlanMap,
+          'real_price': double.tryParse(realPriceController.text) ?? 0.0,
+          'offer_price': double.tryParse(offerPriceController.text) ?? 0.0,
+          'activities': selectedActivities,
+          'transport_options': selectedTransportOptions,
+          'number_of_days': int.tryParse(daysController.text) ?? 0,
+          'number_of_nights': int.tryParse(nightsController.text) ?? 0,
+          'total_number_of_days': totalDays
+        });
+
+        DocumentSnapshot packageDoc = await docRef.get();
+        TripPackageModel newPackage =
+            TripPackageModel.fromMap(packageDoc.data() as Map<String, dynamic>);
+        _package.add(newPackage);
+        _resetForm();
+      } catch (e) {
+        log('Error uploading data: $e');
+        BotToast.showText(text: 'Error submitting data');
+      } finally {
+        _isSubmitting = false;
+        notifyListeners();
+      }
+    } else {
+      _isSubmitting = false;
+      notifyListeners();
     }
   }
 
