@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:travio_admin/view/widgets/global/text_field.dart';
 import '../../../../controller/package_provider.dart';
+import '../../../widgets/global/custom_loading.dart';
 
 class TripPackagePlanningPage extends StatelessWidget {
   @override
@@ -13,6 +16,7 @@ class TripPackagePlanningPage extends StatelessWidget {
         backgroundColor: Colors.orangeAccent,
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: Padding(
@@ -101,25 +105,19 @@ class TripPackagePlanningPage extends StatelessWidget {
                       for (int i = 0;
                           i < tripPackageProvider.totalDays;
                           i++) ...[
-                        TextFormField(
+                        CustomTextForm(
+                          tripPackageProvider: tripPackageProvider,
                           controller:
                               tripPackageProvider.dailyPlanningControllers[i],
-                          decoration: InputDecoration(
-                            labelText: ' Day ${i + 1}',
-                            filled: true,
-                            fillColor:
-                                Colors.orange[50], // Light orange background
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                              borderSide: BorderSide.none,
-                            ),
-                            labelStyle: TextStyle(
-                              color: Colors.orange[700], // Darker orange label
-                            ),
-                          ),
-                          minLines:
-                              1, // Allows the text field to start with 1 line
-                          maxLines: null, // Makes the text field expandable
+                          label: 'Day ${i + 1}',
+                          minLines: 1,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter a description';
+                            }
+                            return null;
+                          },
+                          // maxLines: ,
                         ),
                         const SizedBox(
                             height: 10), // Increased spacing between fields
@@ -140,8 +138,13 @@ class TripPackagePlanningPage extends StatelessWidget {
                       tripPackageProvider.submitForm(context);
                     },
               child: tripPackageProvider.isSubmitting
-                  ? CircularProgressIndicator()
-                  : Text('Submit',style: TextStyle(color: Colors.white),),
+                  ? CustomLoading()
+                  : 
+
+              Text(
+                  'Submit',
+                  style: TextStyle(color: Colors.white),
+                ),
               style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orangeAccent,
                   minimumSize: const Size(double.infinity, 50),
@@ -154,3 +157,5 @@ class TripPackagePlanningPage extends StatelessWidget {
     );
   }
 }
+
+

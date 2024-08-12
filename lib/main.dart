@@ -5,11 +5,9 @@ import 'package:travio_admin/controller/package_provider.dart';
 import 'package:travio_admin/controller/place_provider.dart';
 import 'package:travio_admin/controller/user_provider.dart';
 import 'package:travio_admin/core/common/widgets/navigation_bar.dart';
-// import 'package:travio_admin/core/common/widgets/navigation_bar.dart';
+
 import 'package:travio_admin/core/firebase/firebase_options.dart';
 import 'package:travio_admin/core/routes/routes.dart';
-import 'package:travio_admin/view/pages/product/package/add_package_page.dart';
-// import 'package:travio_admin/view/pages/product/package/add_package_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,13 +36,11 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         routes: routes,
-
         theme: ThemeData(
           primarySwatch: Colors.orange,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        // home: const TNavBar(),
-        home: TripPackageDetailsPage(),
+        home: const TNavBar(),
       ),
     );
   }

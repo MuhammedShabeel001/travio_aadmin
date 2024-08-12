@@ -98,26 +98,42 @@ class TripPackageDetailsPage extends StatelessWidget {
                                   if (value == null || value.isEmpty) {
                                     return 'Required';
                                   }
+                                  int days = int.parse(value);
+                                  int totalDays = int.tryParse(
+                                          tripPackageProvider
+                                              .totalDaysController.text) ??
+                                      0;
+                                  if (days > totalDays) {
+                                    return 'Days cannot be greater than total days';
+                                  }
                                   return null;
                                 },
                               ),
                             ),
-                            const SizedBox(
-                              width: 20,
-                            ),
+                            const SizedBox(width: 20),
                             Flexible(
-                                child: CustomTextForm(
-                              tripPackageProvider: tripPackageProvider,
-                              controller: tripPackageProvider.nightsController,
-                              label: 'Nights',
-                              inputType: TextInputType.number,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Required';
-                                }
-                                return null;
-                              },
-                            )),
+                              child: CustomTextForm(
+                                tripPackageProvider: tripPackageProvider,
+                                controller:
+                                    tripPackageProvider.nightsController,
+                                label: 'Nights',
+                                inputType: TextInputType.number,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Required';
+                                  }
+                                  int nights = int.parse(value);
+                                  int totalDays = int.tryParse(
+                                          tripPackageProvider
+                                              .totalDaysController.text) ??
+                                      0;
+                                  if (nights > totalDays) {
+                                    return 'Nights cannot be greater than total days';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
                           ],
                         ),
                         const SizedBox(height: 16),
@@ -201,7 +217,6 @@ class TripPackageDetailsPage extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 16.0),
                         Row(
                           children: [
                             Flexible(
@@ -249,22 +264,20 @@ class TripPackageDetailsPage extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
               onPressed: () {
-                // Validate the form first
                 if (tripPackageProvider.formKey.currentState?.validate() ??
                     false) {
-                  // Check if at least one activity is selected
                   if (tripPackageProvider.selectedActivities.isEmpty) {
-                    _showSnackBar(context, 'Please select at least one activity.');
+                    _showSnackBar(
+                        context, 'Please select at least one activity.');
                     return;
                   }
 
-                  // Check if at least one transport option is selected
                   if (tripPackageProvider.selectedTransportOptions.isEmpty) {
-                    _showSnackBar(context, 'Please select at least one transport option.');
+                    _showSnackBar(context,
+                        'Please select at least one transport option.');
                     return;
                   }
 
-                  // If all validations pass, navigate to the next page
                   Navigator.push(
                     context,
                     MaterialPageRoute(

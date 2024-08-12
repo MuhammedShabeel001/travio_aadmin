@@ -170,11 +170,16 @@
 //     }
 //   }
 // }
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:io';
 
 class TripPackageProvider with ChangeNotifier {
+  final FirebaseFirestore db = FirebaseFirestore.instance;
+
+
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   TextEditingController nameController = TextEditingController();
@@ -193,6 +198,7 @@ class TripPackageProvider with ChangeNotifier {
   List<String> selectedActivities = [];
   List<String> selectedTransportOptions = [];
   bool isSubmitting = false;
+  final List<String> _uploadedImagesUrls = [];
 
 
   TextEditingController get newActivityController => _newActivityController;
@@ -243,26 +249,51 @@ class TripPackageProvider with ChangeNotifier {
 
   // Submit the form
   Future<void> submitForm(BuildContext context) async {
-    if (!formKey.currentState!.validate()) return;
+  if (!formKey.currentState!.validate()) return;
 
-    isSubmitting = true;
+  isSubmitting = true;
+  notifyListeners();
+
+  try {
+    // Upload images and retrieve their URLs
+    await _uploadImages();
+
+    // Prepare the data to be saved
+    final tripPackageData = {
+      'name': nameController.text,
+      'description': descriptionController.text,
+      'images': _uploadedImagesUrls,  // Saving the uploaded image URLs
+      'daily_plan': dailyPlanningControllers.map((controller) => controller.text).toList(),
+      'real_price': double.tryParse(realPriceController.text) ?? 0.0,
+      'offer_price': double.tryParse(offerPriceController.text) ?? 0.0,
+      'activities': selectedActivities,
+      'transport_options': selectedTransportOptions,
+      'number_of_days': int.tryParse(daysController.text) ?? 0,
+      'number_of_nights': int.tryParse(nightsController.text) ?? 0,
+      'total_number_of_days': totalDays
+    };
+
+    // Add the trip package to the Firestore collection
+    await db.collection('trip_package').add(tripPackageData);
+
+    // Reset the form after successful submission
+    _resetForm();
+    
+    // Show a success message
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Trip package added successfully!')),
+    );
+  } catch (e) {
+    // Show an error message in case of failure
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Failed to submit the form: $e')),
+    );
+  } finally {
+    isSubmitting = false;
     notifyListeners();
-
-    try {
-      // Simulate form submission (e.g., saving to Firebase)
-      await Future.delayed(Duration(seconds: 2)); // Simulate network delay
-      // Add your form submission logic here
-
-      // Reset form after submission
-      _resetForm();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Trip package added successfully!')));
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to submit the form')));
-    } finally {
-      isSubmitting = false;
-      notifyListeners();
-    }
   }
+}
+
 
   void addActivity(String activity) {
     if (!_availableActivities.contains(activity)) {
@@ -288,6 +319,18 @@ class TripPackageProvider with ChangeNotifier {
     }
     notifyListeners();
   }
+
+    Future<void> _uploadImages() async {
+    for (var image in images) {
+      final fileName = DateTime.now().millisecondsSinceEpoch.toString();
+      final ref = FirebaseStorage.instance.ref().child('trip_package_images').child(fileName);
+      final uploadTask = ref.putFile(image);
+      final snapshot = await uploadTask.whenComplete(() {});
+      final url = await snapshot.ref.getDownloadURL();
+      _uploadedImagesUrls.add(url);
+    }
+  }
+// }
 
   void _resetForm() {
     nameController.clear();

@@ -50,6 +50,9 @@ class PlaceProvider with ChangeNotifier {
   PlaceModel? _place;
   PlaceModel? get place => _place;
 
+    int _currentIndex = 0;
+  int get currentIndex => _currentIndex;
+
   bool _submissionSuccessful = false;
   bool get submissionSuccessful => _submissionSuccessful;
 
@@ -192,6 +195,10 @@ class PlaceProvider with ChangeNotifier {
     } catch (e) {
       log('Error fetching location data: $e');
     }
+  }
+  void updateIndex(int index) {
+    _currentIndex = index;
+    notifyListeners();
   }
 
   Future<void> deleteLocation(String placeId, BuildContext context) async {

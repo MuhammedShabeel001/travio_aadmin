@@ -24,55 +24,57 @@ class LocationPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TSearchBar(
-              hint: 'Search by location name, country, continent, or activity',
-              controller: placeProvider.searchController,
-              onChanged: (value) {
-                placeProvider.updateSearchQuery(value);
-              },
+      body: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TSearchBar(
+                hint: 'Search by location name, country, continent, or activity',
+                controller: placeProvider.searchController,
+                onChanged: (value) {
+                  placeProvider.updateSearchQuery(value);
+                },
+              ),
             ),
-          ),
-          Expanded(
-            child: Consumer<PlaceProvider>(
-              builder: (context, placeProvider, child) {
-                if (placeProvider.filteredPlaces.isEmpty) {
-                  return ListView.builder(
-                    itemCount: 5, // Number of shimmer placeholders
-                    itemBuilder: (context, index) {
-                      return Shimmer.fromColors(
-                        baseColor: Colors.grey[300]!,
-                        highlightColor: Colors.grey[100]!,
-                        child: Card(
-                          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+            Expanded(
+              child: Consumer<PlaceProvider>(
+                builder: (context, placeProvider, child) {
+                  if (placeProvider.filteredPlaces.isEmpty) {
+                    return ListView.builder(
+                      itemCount: 5, // Number of shimmer placeholders
+                      itemBuilder: (context, index) {
+                        return Shimmer.fromColors(
+                          baseColor: Color.fromARGB(255, 255, 248, 226),
+                          highlightColor: Colors.grey[100]!,
+                          child: Card(
+                            margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            elevation: 4,
+                            child: Container(
+                              height: 150,
+                              width: double.infinity,
+                              color: Colors.white,
+                            ),
                           ),
-                          elevation: 4,
-                          child: Container(
-                            height: 150,
-                            width: double.infinity,
-                            color: Colors.white,
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                } else {
-                  return ListView.builder(
-                    itemCount: placeProvider.filteredPlaces.length,
-                    itemBuilder: (context, index) {
-                      return DetailCard(place: placeProvider.filteredPlaces[index]);
-                    },
-                  );
-                }
-              },
+                        );
+                      },
+                    );
+                  } else {
+                    return ListView.builder(
+                      itemCount: placeProvider.filteredPlaces.length,
+                      itemBuilder: (context, index) {
+                        return DetailCard(place: placeProvider.filteredPlaces[index]);
+                      },
+                    );
+                  }
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

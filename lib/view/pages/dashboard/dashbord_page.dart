@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:travio_admin/controller/place_provider.dart';
+import 'package:travio_admin/view/pages/manage/active_users.dart';
+import 'package:travio_admin/view/pages/product/location/location_page.dart';
 import 'package:travio_admin/view/widgets/Dashbord/count_card.dart';
 import 'package:travio_admin/view/widgets/global/t_app_bar.dart';
-
 
 import '../../../controller/user_provider.dart';
 import '../../widgets/Dashbord/user_count.dart';
@@ -41,12 +42,21 @@ class DashbordPage extends StatelessWidget {
                             label: 'Locatioins',
                           );
                         } else {
-                          return CountCard(
-                              count: placeProvider.filteredPlaces.length
-                                  .toString(),
-                              label: placeProvider.filteredPlaces.length <= 1
-                                  ? 'Location'
-                                  : 'Locations');
+                          return InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => LocationPage(),
+                                  ));
+                            },
+                            child: CountCard(
+                                count: placeProvider.filteredPlaces.length
+                                    .toString(),
+                                label: placeProvider.filteredPlaces.length <= 1
+                                    ? 'Location'
+                                    : 'Locations'),
+                          );
                         }
                       },
                     )),
@@ -59,8 +69,17 @@ class DashbordPage extends StatelessWidget {
             builder: (context, userProvider, child) {
               if (userProvider.filteredUsers.isEmpty) {
                 return const UserCount(count: '', label: 'Active usrs');
-              }else{
-                return UserCount(count: userProvider.filteredUsers.length.toString(), label: userProvider.filteredUsers.length <=1 ? 'Active user' : 'Active users');
+              } else {
+                return InkWell(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => UsersPage(),));
+                  },
+                  child: UserCount(
+                      count: userProvider.filteredUsers.length.toString(),
+                      label: userProvider.filteredUsers.length <= 1
+                          ? 'Active user'
+                          : 'Active users'),
+                );
               }
             },
           )
