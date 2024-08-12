@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:bot_toast/bot_toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
@@ -24,10 +25,10 @@ class PlaceProvider with ChangeNotifier {
 
   List<String> selectedActivities = [];
 
-  List<File> _images = [];
+  final List<File> _images = [];
   final List<String> _uploadedImagesUrls = [];
 
-  List<String> _availableActivities = [
+  final List<String> _availableActivities = [
     'Hiking',
     'Swimming',
     'Sightseeing',
@@ -47,13 +48,10 @@ class PlaceProvider with ChangeNotifier {
   List<PlaceModel> _places = [];
   List<PlaceModel> get places => _places;
 
-  PlaceModel? _place;
-  PlaceModel? get place => _place;
-
-    int _currentIndex = 0;
+  int _currentIndex = 0;
   int get currentIndex => _currentIndex;
 
-  bool _submissionSuccessful = false;
+  final bool _submissionSuccessful = false;
   bool get submissionSuccessful => _submissionSuccessful;
 
   String _searchQuery = '';
@@ -166,18 +164,13 @@ class PlaceProvider with ChangeNotifier {
         _images.clear();
         _uploadedImagesUrls.clear();
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Submission Successful')),
-        );
+        BotToast.showText(text: 'Submission Successful');
       } catch (e) {
         log('Error uploading data: $e');
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Error submitting data')),
-        );
+        BotToast.showText(text: 'Error submitting data');
       } finally {
         _isSubmitting = false;
         notifyListeners();
-        ScaffoldMessenger.of(context).hideCurrentSnackBar();
       }
     } else {
       _isSubmitting = false;
@@ -196,24 +189,21 @@ class PlaceProvider with ChangeNotifier {
       log('Error fetching location data: $e');
     }
   }
+
   void updateIndex(int index) {
     _currentIndex = index;
     notifyListeners();
   }
 
-  Future<void> deleteLocation(String placeId, BuildContext context) async {
+  Future<void> deleteLocation(String placeId) async {
     try {
       await db.collection('places').doc(placeId).delete();
       _places.removeWhere((place) => place.id == placeId);
       notifyListeners();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Location deleted successfully')),
-      );
+      BotToast.showText(text: 'Location Deleted');
     } catch (e) {
       log('Error deleting location: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Error deleting location')),
-      );
+      BotToast.showText(text: 'Error deleting location');
     }
   }
 }

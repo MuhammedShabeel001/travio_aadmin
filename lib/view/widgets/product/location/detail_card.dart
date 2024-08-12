@@ -1,11 +1,10 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../controller/place_provider.dart';
 import '../../../../model/place_model.dart';
 import '../../../pages/product/location/location_detail_page.dart';
-// import 'package:travio_admin/controller/place_provider.dart';
-// import 'package:travio_admin/model/place_model.dart';
 
 class DetailCard extends StatelessWidget {
   final PlaceModel place;
@@ -38,7 +37,8 @@ class DetailCard extends StatelessWidget {
             Stack(
               children: [
                 ClipRRect(
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(12)),
                   child: Image.network(
                     place.images.first,
                     height: 150,
@@ -100,18 +100,12 @@ class DetailCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       IconButton(
-                        onPressed: () {
-                          // Implement edit functionality here
-                          // placeProvider.editLocation(place);
-                          // ScaffoldMessenger.of(context).showSnackBar(
-                          //   const SnackBar(content: Text('Location edited successfully')),
-                          // );
-                        },
+                        onPressed: () {},
                         icon: const Icon(Icons.edit, color: Colors.orange),
                       ),
                       IconButton(
                         onPressed: () {
-                          showDeleteConfirmationDialog(context, placeProvider, place.id);
+                          showDeleteConfirmationDialog(placeProvider, place.id);
                         },
                         icon: const Icon(Icons.delete, color: Colors.red),
                       ),
@@ -126,55 +120,82 @@ class DetailCard extends StatelessWidget {
     );
   }
 
-  void showDeleteConfirmationDialog(BuildContext context, PlaceProvider placeProvider, String placeId) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          title: const Text(
-            'Delete Location',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.orange,
-            ),
+  void showDeleteConfirmationDialog(
+      PlaceProvider placeProvider, String placeId) {
+    BotToast.showCustomNotification(
+      toastBuilder: (cancelFunc) {
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+                spreadRadius: 2,
+              ),
+            ],
           ),
-          content: const Text(
-            'Are you sure you want to delete this location?',
-            style: TextStyle(
-              fontSize: 16,
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.grey[700],
-                textStyle: const TextStyle(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Delete Location',
+                style: TextStyle(
                   fontWeight: FontWeight.bold,
+                  color: Colors.orange,
+                  fontSize: 18,
                 ),
               ),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                placeProvider.deleteLocation(placeId, context);
-              },
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.red,
-                textStyle: const TextStyle(
-                  fontWeight: FontWeight.bold,
+              const SizedBox(height: 10),
+              const Text(
+                'Are you sure you want to delete this location?',
+                style: TextStyle(
+                  fontSize: 16,
                 ),
               ),
-              child: const Text('Delete'),
-            ),
-          ],
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      cancelFunc();
+                    },
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.grey[700],
+                      textStyle: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    child: const Text('Cancel'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      cancelFunc();
+                      placeProvider.deleteLocation(placeId);
+                    },
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.red,
+                      textStyle: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    child: const Text('Delete'),
+                  ),
+                ],
+              ),
+            ],
+          ),
         );
       },
+      duration: null,
+      onlyOne: true,
+      backButtonBehavior: BackButtonBehavior.none,
+      crossPage: true,
     );
   }
 }

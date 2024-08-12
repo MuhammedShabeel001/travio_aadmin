@@ -1,184 +1,15 @@
-// import 'dart:developer';
-// import 'dart:io';
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_storage/firebase_storage.dart';
-// import 'package:file_picker/file_picker.dart';
-// import 'package:flutter/material.dart';
+import 'dart:developer';
 
-// class TripPackageProvider extends ChangeNotifier {
-//   final FirebaseFirestore db = FirebaseFirestore.instance;
-
-//   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-//   final TextEditingController nameController = TextEditingController();
-//   final TextEditingController descriptionController = TextEditingController();
-//   final TextEditingController sourceLocationController = TextEditingController();
-//   final TextEditingController destinationLocationController = TextEditingController();
-//   final TextEditingController daysController = TextEditingController();
-//   final TextEditingController nightsController = TextEditingController();
-//   final TextEditingController morningsController = TextEditingController();
-//   final TextEditingController realPriceController = TextEditingController();
-//   final TextEditingController offerPriceController = TextEditingController();
-//   final TextEditingController startDateController = TextEditingController();
-//   final TextEditingController endDateController = TextEditingController();
-  
-//   String? selectedMeansOfTravel;
-//   DateTime? selectedStartDate;
-//   DateTime? selectedEndDate;
-//   List<String> selectedActivities = [];
-//   List<File> images = []; // Assuming you are using `dart:io` for images
-//   final List<String> _uploadedImagesUrls = [];
-//   bool isLoading = false;
-
-//   GlobalKey<FormState> get formKey => _formKey;
-
-//   // Fetch suggestions for locations
-//   Future<List<String>> getSuggestions(String query, String field) async {
-//     QuerySnapshot snapshot = await db.collection('places')
-//         .where('name', isGreaterThanOrEqualTo: query)
-//         .where('name', isLessThanOrEqualTo: query + '\uf8ff')
-//         .get();
-
-//     List<String> suggestions = snapshot.docs.map((doc) {
-//       return (doc.data() as Map<String, dynamic>)['name'] as String;
-//     }).toList();
-
-//     if (field == 'initial') {
-//       suggestions.remove(destinationLocationController.text);
-//     } else if (field == 'final') {
-//       suggestions.remove(sourceLocationController.text);
-//     }
-
-//     return suggestions;
-//   }
-
-//   // Add trip package
-//   Future<void> addTripPackage(BuildContext context) async {
-//     if (!_formKey.currentState!.validate()) return;
-
-//     isLoading = true;
-//     notifyListeners();
-
-//     try {
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         const SnackBar(
-//           content: Row(
-//             children: [
-//               CircularProgressIndicator(),
-//               SizedBox(width: 16.0),
-//               Text("Submitting..."),
-//             ],
-//           ),
-//         ),
-//       );
-
-//       await _uploadImages();
-
-//       await db.collection('trip_packages').add({
-//         'name': nameController.text,
-//         'description': descriptionController.text,
-//         'sourceLocation': sourceLocationController.text,
-//         'destinationLocation': destinationLocationController.text,
-//         'startDate': selectedStartDate,
-//         'endDate': selectedEndDate,
-//         'days': int.parse(daysController.text),
-//         'nights': int.parse(nightsController.text),
-//         'mornings': int.parse(morningsController.text),
-//         'activities': selectedActivities,
-//         'meansOfTravel': selectedMeansOfTravel,
-//         'realPrice': double.parse(realPriceController.text),
-//         'offerPrice': double.parse(offerPriceController.text),
-//         'image_urls': _uploadedImagesUrls,
-//       });
-
-//       ScaffoldMessenger.of(context).hideCurrentSnackBar();
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         const SnackBar(content: Text('Trip Package added successfully')),
-//       );
-
-//       // Clear the form after submission
-//       nameController.clear();
-//       descriptionController.clear();
-//       sourceLocationController.clear();
-//       destinationLocationController.clear();
-//       daysController.clear();
-//       nightsController.clear();
-//       morningsController.clear();
-//       realPriceController.clear();
-//       offerPriceController.clear();
-//       selectedMeansOfTravel = null;
-//       selectedStartDate = null;
-//       selectedEndDate = null;
-//       selectedActivities.clear();
-//       images = [];
-//       _uploadedImagesUrls.clear();
-//     } catch (e) {
-//       log('Error adding package: $e');
-//       ScaffoldMessenger.of(context).hideCurrentSnackBar();
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         const SnackBar(content: Text('Error adding trip package')),
-//       );
-//     }
-
-//     isLoading = false;
-//     notifyListeners();
-//   }
-
-//   void toggleMeansOfTravel(String transport) {
-//     if (selectedMeansOfTravel == transport) {
-//       selectedMeansOfTravel = null;
-//     } else {
-//       selectedMeansOfTravel = transport;
-//     }
-//     notifyListeners();
-//   }
-
-//   void toggleActivity(String activity) {
-//     if (selectedActivities.contains(activity)) {
-//       selectedActivities.remove(activity);
-//     } else {
-//       selectedActivities.add(activity);
-//     }
-//     notifyListeners();
-//   }
-
-//   Future<void> pickImages() async {
-//     final result = await FilePicker.platform.pickFiles(
-//       allowMultiple: true,
-//       type: FileType.image,
-//     );
-//     if (result != null) {
-//       images.addAll(result.files.map((file) => File(file.path!)).toList());
-//       notifyListeners();
-//     }
-//   }
-
-//   void removeImage(int index) {
-//     if (index >= 0 && index < images.length) {
-//       images.removeAt(index);
-//       notifyListeners();
-//     }
-//   }
-
-//   Future<void> _uploadImages() async {
-//     for (var image in images) {
-//       final fileName = DateTime.now().millisecondsSinceEpoch.toString();
-//       final ref = FirebaseStorage.instance.ref().child('trip_package_images').child(fileName);
-//       final uploadTask = ref.putFile(image);
-//       final snapshot = await uploadTask.whenComplete(() {});
-//       final url = await snapshot.ref.getDownloadURL();
-//       _uploadedImagesUrls.add(url);
-//     }
-//   }
-// }
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:io';
 
+import 'package:travio_admin/model/package_model.dart';
+
 class TripPackageProvider with ChangeNotifier {
   final FirebaseFirestore db = FirebaseFirestore.instance;
-
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -190,7 +21,6 @@ class TripPackageProvider with ChangeNotifier {
   TextEditingController realPriceController = TextEditingController();
   TextEditingController offerPriceController = TextEditingController();
   final TextEditingController _newActivityController = TextEditingController();
-  
 
   int totalDays = 0;
   List<TextEditingController> dailyPlanningControllers = [];
@@ -200,10 +30,17 @@ class TripPackageProvider with ChangeNotifier {
   bool isSubmitting = false;
   final List<String> _uploadedImagesUrls = [];
 
+  int _currentIndex = 0;
+  int get currentIndex => _currentIndex;
 
   TextEditingController get newActivityController => _newActivityController;
   List<String> get availableActivities => _availableActivities;
   List<String> get transportOptions => _transportOptions;
+
+  List<TripPackageModel> _package = [];
+  List<TripPackageModel> get package => _package;
+
+  String _searchQuery = '';
 
   List<String> _availableActivities = [
     'Hiking',
@@ -218,17 +55,15 @@ class TripPackageProvider with ChangeNotifier {
     'Train',
     'Bus',
     'Ship',
-    // 'Dining',
   ];
 
-  // Update the total days and regenerate daily planning controllers
   void updateTotalDays(int days) {
     totalDays = days;
-    dailyPlanningControllers = List.generate(days, (index) => TextEditingController());
+    dailyPlanningControllers =
+        List.generate(days, (index) => TextEditingController());
     notifyListeners();
   }
 
-  // Handle image picking
   Future<void> pickImages() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.image,
@@ -241,59 +76,48 @@ class TripPackageProvider with ChangeNotifier {
     }
   }
 
-  // Remove an image
   void removeImage(int index) {
     images.removeAt(index);
     notifyListeners();
   }
 
-  // Submit the form
   Future<void> submitForm(BuildContext context) async {
-  if (!formKey.currentState!.validate()) return;
-
-  isSubmitting = true;
-  notifyListeners();
-
-  try {
-    // Upload images and retrieve their URLs
-    await _uploadImages();
-
-    // Prepare the data to be saved
-    final tripPackageData = {
-      'name': nameController.text,
-      'description': descriptionController.text,
-      'images': _uploadedImagesUrls,  // Saving the uploaded image URLs
-      'daily_plan': dailyPlanningControllers.map((controller) => controller.text).toList(),
-      'real_price': double.tryParse(realPriceController.text) ?? 0.0,
-      'offer_price': double.tryParse(offerPriceController.text) ?? 0.0,
-      'activities': selectedActivities,
-      'transport_options': selectedTransportOptions,
-      'number_of_days': int.tryParse(daysController.text) ?? 0,
-      'number_of_nights': int.tryParse(nightsController.text) ?? 0,
-      'total_number_of_days': totalDays
-    };
-
-    // Add the trip package to the Firestore collection
-    await db.collection('trip_package').add(tripPackageData);
-
-    // Reset the form after successful submission
-    _resetForm();
-    
-    // Show a success message
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Trip package added successfully!')),
-    );
-  } catch (e) {
-    // Show an error message in case of failure
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Failed to submit the form: $e')),
-    );
-  } finally {
-    isSubmitting = false;
+    isSubmitting = true;
     notifyListeners();
-  }
-}
 
+    if (formKey.currentState?.validate() ?? false) {
+      try {
+        await _uploadImages();
+
+        DocumentReference docRef =
+            FirebaseFirestore.instance.collection('trip_packages').doc();
+        String packageId = docRef.id;
+
+        await docRef.set({
+          'id': packageId,
+          'name': nameController.text,
+          'description': descriptionController.text,
+          'images': _uploadedImagesUrls,
+          'daily_plan': dailyPlanningControllers
+              .map((controller) => controller.text)
+              .toList(),
+          'real_price': double.tryParse(realPriceController.text) ?? 0.0,
+          'offer_price': double.tryParse(offerPriceController.text) ?? 0.0,
+          'activities': selectedActivities,
+          'transport_options': selectedTransportOptions,
+          'number_of_days': int.tryParse(daysController.text) ?? 0,
+          'number_of_nights': int.tryParse(nightsController.text) ?? 0,
+          'total_number_of_days': totalDays
+        });
+
+        DocumentSnapshot packageDoc = await docRef.get();
+        TripPackageModel newPackage =
+            TripPackageModel.fromMap(packageDoc.data() as Map<String, dynamic>);
+        _package.add(newPackage);
+        _resetForm();
+      } catch (e) {}
+    }
+  }
 
   void addActivity(String activity) {
     if (!_availableActivities.contains(activity)) {
@@ -320,17 +144,58 @@ class TripPackageProvider with ChangeNotifier {
     notifyListeners();
   }
 
-    Future<void> _uploadImages() async {
+  List<TripPackageModel> get filteredPackages {
+    if (_searchQuery.isEmpty) {
+      return _package;
+    } else {
+      final searchLower = _searchQuery.toLowerCase();
+      return _package.where((package) {
+        final nameLower = package.name.toLowerCase();
+        final activitiesLower = package.activities
+            .map((activity) => activity.toLowerCase())
+            .toList();
+
+        print('Searching for: $searchLower in ${package.name}');
+        print('Activities: $activitiesLower');
+
+        return nameLower.contains(searchLower) ||
+            activitiesLower.any((activity) => activity.contains(searchLower));
+      }).toList();
+    }
+  }
+
+  Future<void> fetchAllPackages() async {
+    try {
+      QuerySnapshot tripPackageSnapshot =
+          await db.collection('trip_package').get();
+      _package = tripPackageSnapshot.docs
+          .map((doc) =>
+              TripPackageModel.fromMap(doc.data() as Map<String, dynamic>))
+          .toList();
+      notifyListeners();
+    } catch (e) {
+      log('Error fetching location data: $e');
+    }
+  }
+
+  void updateIndex(int index) {
+    _currentIndex = index;
+    notifyListeners();
+  }
+
+  Future<void> _uploadImages() async {
     for (var image in images) {
       final fileName = DateTime.now().millisecondsSinceEpoch.toString();
-      final ref = FirebaseStorage.instance.ref().child('trip_package_images').child(fileName);
+      final ref = FirebaseStorage.instance
+          .ref()
+          .child('trip_package_images')
+          .child(fileName);
       final uploadTask = ref.putFile(image);
       final snapshot = await uploadTask.whenComplete(() {});
       final url = await snapshot.ref.getDownloadURL();
       _uploadedImagesUrls.add(url);
     }
   }
-// }
 
   void _resetForm() {
     nameController.clear();

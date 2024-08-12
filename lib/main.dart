@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -35,6 +36,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
+        builder: BotToastInit(),
+        navigatorObservers: [BotToastNavigatorObserver()],
         routes: routes,
         theme: ThemeData(
           primarySwatch: Colors.orange,

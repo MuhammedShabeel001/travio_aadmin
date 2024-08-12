@@ -1,8 +1,11 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:travio_admin/controller/package_provider.dart';
 import 'package:travio_admin/controller/place_provider.dart';
 import 'package:travio_admin/view/pages/manage/active_users.dart';
 import 'package:travio_admin/view/pages/product/location/location_page.dart';
+import 'package:travio_admin/view/pages/product/package/package_page.dart';
 import 'package:travio_admin/view/widgets/Dashbord/count_card.dart';
 import 'package:travio_admin/view/widgets/global/t_app_bar.dart';
 
@@ -16,11 +19,13 @@ class DashbordPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
     final placeProvider = Provider.of<PlaceProvider>(context);
+    final packageProvider = Provider.of<TripPackageProvider>(context);
 
     // Fetch users when the widget is built for the first time
     WidgetsBinding.instance.addPostFrameCallback((_) {
       userProvider.fetchUsers();
       placeProvider.fetchAllLocations();
+      packageProvider.fetchAllPackages();
     });
 
     return Scaffold(
@@ -38,7 +43,7 @@ class DashbordPage extends StatelessWidget {
                       builder: (context, placeProvider, child) {
                         if (placeProvider.filteredPlaces.isEmpty) {
                           return const CountCard(
-                            count: '',
+                            count: '0',
                             label: 'Locatioins',
                           );
                         } else {
@@ -60,19 +65,49 @@ class DashbordPage extends StatelessWidget {
                         }
                       },
                     )),
-                const Expanded(
-                    flex: 1, child: CountCard(count: '65', label: 'Packages')),
+                 Expanded(
+                    flex: 1,
+                    child: Consumer<TripPackageProvider>(
+                      builder: (context, packageProvider, child) {
+                        if (packageProvider.filteredPackages.isEmpty) {
+                          return const CountCard(
+                            count: '0', 
+                            label: 'Packages',
+                          );
+                        } else {
+                          return InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PackagePage(),
+                                  ));
+                            },
+                            child: CountCard(
+                                count: packageProvider.filteredPackages.length
+                                    .toString(),
+                                label: packageProvider.filteredPackages.length <= 1
+                                    ? 'Package'
+                                    : 'packages'),
+                          );
+                        }
+                      },
+                    )),
               ],
             ),
           ),
           Consumer<UserProvider>(
             builder: (context, userProvider, child) {
               if (userProvider.filteredUsers.isEmpty) {
-                return const UserCount(count: '', label: 'Active usrs');
+                return const UserCount(count: '0', label: 'Active usrs');
               } else {
                 return InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => UsersPage(),));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UsersPage(),
+                        ));
                   },
                   child: UserCount(
                       count: userProvider.filteredUsers.length.toString(),
@@ -83,6 +118,11 @@ class DashbordPage extends StatelessWidget {
               }
             },
           )
-        ]));
+        ]),
+        floatingActionButton: FloatingActionButton.small(onPressed: (){
+// BotToast.showCustomNotification(toastBuilder: toastBuilder);
+
+        }),
+        );
   }
 }

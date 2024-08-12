@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:travio_admin/view/pages/product/package/planning_trip_page.dart';
@@ -6,15 +7,6 @@ import '../../../../controller/package_provider.dart';
 
 class TripPackageDetailsPage extends StatelessWidget {
   const TripPackageDetailsPage({super.key});
-
-  void _showSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -267,14 +259,16 @@ class TripPackageDetailsPage extends StatelessWidget {
                 if (tripPackageProvider.formKey.currentState?.validate() ??
                     false) {
                   if (tripPackageProvider.selectedActivities.isEmpty) {
-                    _showSnackBar(
-                        context, 'Please select at least one activity.');
+                    BotToast.showText(
+                        text: 'Please select at least one activity.');
+
                     return;
                   }
 
                   if (tripPackageProvider.selectedTransportOptions.isEmpty) {
-                    _showSnackBar(context,
-                        'Please select at least one transport option.');
+                    BotToast.showText(
+                        text: 'Please select at least  one transport option.');
+
                     return;
                   }
 
