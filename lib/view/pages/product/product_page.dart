@@ -9,43 +9,41 @@ class ProductPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      child: SafeArea(
-        child: Scaffold(
+      child: Scaffold(
+        backgroundColor: Colors.orangeAccent,
+        appBar: 
+        
+        AppBar(
           backgroundColor: Colors.orangeAccent,
-          appBar: 
-          
-          AppBar(
-            backgroundColor: Colors.orangeAccent,
-
-            title: const Text(
-              'Product',
-              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-            ),
-            bottom: const 
-          TabBar(
-                indicatorWeight: 13,
-                indicatorSize: TabBarIndicatorSize.tab,
-                physics: BouncingScrollPhysics(),
-                labelColor: Colors.black,
-                labelStyle: TextStyle(fontSize: 18),
-                indicator: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(15))),
-                tabs: [
-                  Tab(
-                    text: 'Locations',
-                  ),
-                  Tab(
-                    text: 'Packages',
-                  ),
-                ]),
+      
+          title: const Text(
+            'Product',
+            style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
           ),
-          body: const TabBarView(children: [
-            LocationPage(),
-            PackagePage(),
-          ]),
+          bottom: const 
+        TabBar(
+              indicatorWeight: 13,
+              indicatorSize: TabBarIndicatorSize.tab,
+              physics: BouncingScrollPhysics(),
+              labelColor: Colors.black,
+              labelStyle: TextStyle(fontSize: 18),
+              indicator: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(15))),
+              tabs: [
+                Tab(
+                  text: 'Locations',
+                ),
+                Tab(
+                  text: 'Packages',
+                ),
+              ]),
         ),
+        body: const TabBarView(children: [
+          LocationPage(),
+          PackagePage(),
+        ]),
       ),
     );
   }

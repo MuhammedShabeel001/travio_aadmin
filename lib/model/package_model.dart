@@ -42,10 +42,10 @@ class TripPackageModel {
     // Check if dailyPlanData is a Map or List and handle accordingly
     Map<int, String> dailyPlan = {};
     if (dailyPlanData is Map<String, dynamic>) {
-      dailyPlan = dailyPlanData.map(
-        (key, value) => MapEntry(int.tryParse(key) ?? 0, value as String),
-      );
-    } else if (dailyPlanData is List<dynamic>) {
+  dailyPlan = dailyPlanData.map(
+    (key, value) => MapEntry(int.tryParse(key) ?? 0, value as String),
+  );
+} else if (dailyPlanData is List<dynamic>) {
       // Handle if it's a List; convert list items to Map<int, String> if possible
       for (int i = 0; i < dailyPlanData.length; i++) {
         dailyPlan[i] = dailyPlanData[i] as String;

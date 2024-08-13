@@ -13,6 +13,8 @@ class TripPackageProvider with ChangeNotifier {
   final FirebaseFirestore db = FirebaseFirestore.instance;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TextEditingController searchController = TextEditingController();
+
 
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
@@ -25,7 +27,8 @@ class TripPackageProvider with ChangeNotifier {
 
   int totalDays = 0;
   List<TextEditingController> dailyPlanningControllers = [];
-  List<File> images = [];
+  final List<File> _images = [];
+
   List<String> selectedActivities = [];
   List<String> selectedTransportOptions = [];
   bool _isSubmitting = false;
@@ -39,6 +42,8 @@ class TripPackageProvider with ChangeNotifier {
   List<String> get transportOptions => _transportOptions;
   GlobalKey<FormState> get formKey => _formKey;
   bool get isSubmitting => _isSubmitting;
+  List<File> get images => _images;
+
 
   List<TripPackageModel> _package = [];
   List<TripPackageModel> get package => _package;
@@ -68,13 +73,12 @@ class TripPackageProvider with ChangeNotifier {
   }
 
   Future<void> pickImages() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.image,
+    final result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
+      type: FileType.image,
     );
-
     if (result != null) {
-      images = result.paths.map((path) => File(path!)).toList();
+      images.addAll(result.files.map((file) => File(file.path!)).toList());
       notifyListeners();
     }
   }
@@ -106,6 +110,12 @@ class TripPackageProvider with ChangeNotifier {
     } else {
       selectedTransportOptions.add(transport);
     }
+    notifyListeners();
+  }
+
+  
+  void updateSearchQuery(String query) {
+    _searchQuery = query;
     notifyListeners();
   }
 
@@ -152,17 +162,15 @@ class TripPackageProvider with ChangeNotifier {
   }
 
   Future<void> _uploadImages() async {
-    final List<Future<String>> uploadFutures = images.map((image) async {
+    for (var image in _images) {
       final fileName = DateTime.now().millisecondsSinceEpoch.toString();
-      final ref = FirebaseStorage.instance
-          .ref()
-          .child('trip_package_images')
-          .child(fileName);
-      final snapshot = await ref.putFile(image).whenComplete(() {});
-      return await snapshot.ref.getDownloadURL();
-    }).toList();
-
-    _uploadedImagesUrls.addAll(await Future.wait(uploadFutures));
+      final ref =
+          FirebaseStorage.instance.ref().child('package_images').child(fileName);
+      final uploadTask = ref.putFile(image);
+      final snapshot = await uploadTask.whenComplete(() {});
+      final url = await snapshot.ref.getDownloadURL();
+      _uploadedImagesUrls.add(url);
+    }
   }
 
   Future<void> submitForm() async {
@@ -177,10 +185,11 @@ class TripPackageProvider with ChangeNotifier {
             FirebaseFirestore.instance.collection('trip_packages').doc();
         String packageId = docRef.id;
 
-        Map<int, String> dailyPlanMap = {};
-        for (int i = 0; i < dailyPlanningControllers.length; i++) {
-          dailyPlanMap[i] = dailyPlanningControllers[i].text;
-        }
+        Map<String, String> dailyPlanMap = {};
+for (int i = 0; i < dailyPlanningControllers.length; i++) {
+  dailyPlanMap[i.toString()] = dailyPlanningControllers[i].text;
+}
+  
 
         await docRef.set({
           'id': packageId,
