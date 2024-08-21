@@ -1,12 +1,13 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:travio_admin/view/widgets/global/text_field.dart';
 import '../../../../controller/package_provider.dart';
 import '../../../widgets/global/custom_loading.dart';
 
 class TripPackagePlanningPage extends StatelessWidget {
+  const TripPackagePlanningPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     final tripPackageProvider = Provider.of<TripPackageProvider>(context);
@@ -142,7 +143,8 @@ if (tripPackageProvider.formKey.currentState?.validate() ?? false) {
                   }
 }
 
-                      tripPackageProvider.submitForm();
+                      tripPackageProvider.submitForm(context);
+                      // Navigator.pop(context);
                     },
               style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orangeAccent,
@@ -150,8 +152,8 @@ if (tripPackageProvider.formKey.currentState?.validate() ?? false) {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15))),
               child: tripPackageProvider.isSubmitting
-                  ? CustomLoading()
-                  : Text(
+                  ? const CustomLoading()
+                  : const Text(
                       'Submit',
                       style: TextStyle(color: Colors.white),
                     ),

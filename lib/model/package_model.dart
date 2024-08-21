@@ -1,21 +1,24 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TripPackageModel {
-  String id;
-  String name;
-  String description;
-  List<String> images;
-  Map<int, String> dailyPlan; // Plan for each day
-  double realPrice;
-  double offerPrice;
-  List<String> activities;
-  List<String> transportOptions;
-  int numberOfDays;
-  int numberOfNights;
-  int totalDays;
-  List<String>? customerReviews; // Nullable customer reviews
-  int bookedCount;
-  int likeCount;
+  final String id;
+  final String name;
+  final String description;
+  final List<String> images;
+  final Map<int, String> dailyPlan;
+  final double realPrice;
+  final double offerPrice;
+  final List<String> activities;
+  final List<String> transportOptions;
+  final int numberOfDays;
+  final int numberOfNights;
+  final int bookedCount;
+  final int likeCount;
+  final int totalDays;
+  final double ratingCount;
+  final Map<String, String> customerReviews;
+  final List<String> locations;
+  final Set<String> likedByUserIds;
 
   TripPackageModel({
     required this.id,
@@ -29,24 +32,24 @@ class TripPackageModel {
     required this.transportOptions,
     required this.numberOfDays,
     required this.numberOfNights,
+    required this.bookedCount,
+    required this.likeCount,
     required this.totalDays,
-    this.customerReviews,
-    this.bookedCount = 0,
-    this.likeCount = 0,
+    required this.ratingCount,
+    required this.customerReviews,
+    required this.locations,
+    required this.likedByUserIds,
   });
 
   factory TripPackageModel.fromMap(Map<String, dynamic> map) {
-    // Safely handle the dailyPlan field which might be a List or a Map
     final dailyPlanData = map['daily_plan'];
-
-    // Check if dailyPlanData is a Map or List and handle accordingly
     Map<int, String> dailyPlan = {};
+
     if (dailyPlanData is Map<String, dynamic>) {
-  dailyPlan = dailyPlanData.map(
-    (key, value) => MapEntry(int.tryParse(key) ?? 0, value as String),
-  );
-} else if (dailyPlanData is List<dynamic>) {
-      // Handle if it's a List; convert list items to Map<int, String> if possible
+      dailyPlan = dailyPlanData.map(
+        (key, value) => MapEntry(int.tryParse(key) ?? 0, value as String),
+      );
+    } else if (dailyPlanData is List<dynamic>) {
       for (int i = 0; i < dailyPlanData.length; i++) {
         dailyPlan[i] = dailyPlanData[i] as String;
       }
@@ -56,20 +59,22 @@ class TripPackageModel {
       id: map['id'] as String,
       name: map['name'] as String,
       description: map['description'] as String,
-      images: List<String>.from(map['images'] as List<dynamic>),
+      images: List<String>.from(map['images'] as List<dynamic>? ?? []),
       dailyPlan: dailyPlan,
       realPrice: (map['real_price'] as num).toDouble(),
       offerPrice: (map['offer_price'] as num).toDouble(),
-      activities: List<String>.from(map['activities'] as List<dynamic>),
-      transportOptions: List<String>.from(map['transport_options'] as List<dynamic>),
+      activities: List<String>.from(map['activities'] as List<dynamic>? ?? []),
+      transportOptions:
+          List<String>.from(map['transport_options'] as List<dynamic>? ?? []),
       numberOfDays: map['number_of_days'] as int,
       numberOfNights: map['number_of_nights'] as int,
-      customerReviews: map['customer_reviews'] != null
-          ? List<String>.from(map['customer_reviews'] as List<dynamic>)
-          : null,
       bookedCount: map['booked_count'] as int? ?? 0,
       likeCount: map['like_count'] as int? ?? 0,
       totalDays: map['total_number_of_days'] as int,
+      ratingCount: (map['rating_count'] as num?)?.toDouble() ?? 0.0,
+      customerReviews: Map<String, String>.from(map['customer_reviews'] ?? {}),
+      locations: List<String>.from(map['locations'] as List<dynamic>? ?? []),
+      likedByUserIds: Set<String>.from(map['liked_by_user_ids'] ?? []),
     );
   }
 
@@ -86,10 +91,13 @@ class TripPackageModel {
       'transport_options': transportOptions,
       'number_of_days': numberOfDays,
       'number_of_nights': numberOfNights,
-      'customer_reviews': customerReviews,
       'booked_count': bookedCount,
       'like_count': likeCount,
-      'total_number_of_days': totalDays
+      'total_number_of_days': totalDays,
+      'rating_count': ratingCount,
+      'customer_reviews': customerReviews,
+      'locations': locations,
+      'liked_by_user_ids': likedByUserIds.toList(),
     };
   }
 }

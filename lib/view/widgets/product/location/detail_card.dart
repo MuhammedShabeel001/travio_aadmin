@@ -9,7 +9,7 @@ import '../../../pages/product/location/location_detail_page.dart';
 class DetailCard extends StatelessWidget {
   final PlaceModel place;
 
-  const DetailCard({Key? key, required this.place}) : super(key: key);
+  const DetailCard({super.key, required this.place});
 
   @override
   Widget build(BuildContext context) {

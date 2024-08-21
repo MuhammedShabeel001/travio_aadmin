@@ -15,7 +15,7 @@ class AddItemCard extends StatelessWidget {
       child: Center(
         child: Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
               fontSize: 25, fontWeight: FontWeight.bold, color: Colors.white),
         ),
       ),

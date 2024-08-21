@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ReviewsTab extends StatelessWidget {
-  const ReviewsTab({Key? key}) : super(key: key);
+  const ReviewsTab({super.key});
 
   @override
   Widget build(BuildContext context) {

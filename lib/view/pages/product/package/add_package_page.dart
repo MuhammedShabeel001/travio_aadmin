@@ -1,5 +1,6 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:provider/provider.dart';
 import 'package:travio_admin/view/pages/product/package/planning_trip_page.dart';
 import 'package:travio_admin/view/widgets/global/text_field.dart';
@@ -58,6 +59,57 @@ class TripPackageDetailsPage extends StatelessWidget {
                           minLines: 1,
                           maxLines: 5,
                         ),
+                        const SizedBox(height: 16),
+                        TypeAheadFormField<String>(
+  textFieldConfiguration: TextFieldConfiguration(
+    controller: tripPackageProvider.countryController,
+   decoration: InputDecoration(
+                              labelText: 'Country',
+                              filled: true,
+                              fillColor: Colors.orange[50],
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                                borderSide: BorderSide.none,
+                              ),
+                              labelStyle: TextStyle(color: Colors.orange[700]),
+                            ),
+  ),
+  suggestionsCallback: (pattern) {
+    return tripPackageProvider.availableCountries.where(
+      (country) => country.toLowerCase().contains(pattern.toLowerCase()),
+    );
+  },
+  itemBuilder: (context, suggestion) {
+    return ListTile(
+      title: Text(suggestion),
+    );
+  },
+  onSuggestionSelected: (suggestion) {
+    tripPackageProvider.toggleCountrySelection(suggestion);
+    tripPackageProvider.countryController.clear();
+  },
+  hideOnEmpty: true,
+  noItemsFoundBuilder: (context) => Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Text(
+      'No Countries Found',
+      style: TextStyle(fontSize: 16, color: Colors.grey),
+    ),
+  ),
+),
+Wrap(
+  spacing: 8.0,
+  runSpacing: 4.0,
+  children: tripPackageProvider.selectedCountries.map((country) {
+    return Chip(
+      label: Text(country),
+      onDeleted: () => tripPackageProvider.toggleCountrySelection(country),
+    );
+  }).toList(),
+),
+
+
+
                         const SizedBox(height: 16),
                         CustomTextForm(
                           tripPackageProvider: tripPackageProvider,
@@ -280,7 +332,7 @@ class TripPackageDetailsPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (_) => TripPackagePlanningPage()),
+                        builder: (_) => const TripPackagePlanningPage()),
                   );
                 }
               },

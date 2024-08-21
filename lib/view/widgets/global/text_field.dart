@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import '../../../controller/package_provider.dart';
 
 class CustomTextForm extends StatelessWidget {
-  CustomTextForm({
-    Key? key,
+  const CustomTextForm({
+    super.key,
     required this.tripPackageProvider,
     required this.controller,
     required this.label,
@@ -14,7 +14,7 @@ class CustomTextForm extends StatelessWidget {
     this.onChanged, // Optional onChanged
     this.minLines,  // Optional minLines
     this.maxLines,  // Optional maxLines
-  }) : super(key: key);
+  });
 
   final TripPackageProvider tripPackageProvider;
   final TextEditingController controller;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:travio_admin/controller/place_provider.dart';
@@ -41,27 +42,9 @@ class LocationPage extends StatelessWidget {
               child: Consumer<PlaceProvider>(
                 builder: (context, placeProvider, child) {
                   if (placeProvider.filteredPlaces.isEmpty) {
-                    return ListView.builder(
-                      itemCount: 5, // Number of shimmer placeholders
-                      itemBuilder: (context, index) {
-                        return Shimmer.fromColors(
-                          baseColor: Color.fromARGB(255, 255, 248, 226),
-                          highlightColor: Colors.grey[100]!,
-                          child: Card(
-                            margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            elevation: 4,
-                            child: Container(
-                              height: 150,
-                              width: double.infinity,
-                              color: Colors.white,
-                            ),
-                          ),
-                        );
-                      },
-                    );
+                    return Center(
+                      child: SvgPicture.asset('assets/icons/empty.svg'),
+                    );;
                   } else {
                     return ListView.builder(
                       itemCount: placeProvider.filteredPlaces.length,
@@ -79,7 +62,7 @@ class LocationPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Add location action
-          Navigator.push(context, MaterialPageRoute(builder: (context) => AddLocation(),));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const AddLocation(),));
         },
         backgroundColor: Colors.orange,
         tooltip: 'Add Location',

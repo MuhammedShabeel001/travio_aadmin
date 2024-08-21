@@ -12,7 +12,7 @@ import '../../../pages/product/package/package_detail_page.dart';
 class TripPackageCard extends StatelessWidget {
   final TripPackageModel tripPackage;
 
-  const TripPackageCard({Key? key, required this.tripPackage}) : super(key: key);
+  const TripPackageCard({super.key, required this.tripPackage});
 
   @override
   Widget build(BuildContext context) {
@@ -177,8 +177,8 @@ class TripPackageCard extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () {
-                      // cancelFunc();
-                      // tripPackageProvider.deleteTripPackage(tripPackageId);
+                      cancelFunc();
+                      tripPackageProvider.deletePackage(tripPackageId);
                     },
                     style: TextButton.styleFrom(
                       foregroundColor: Colors.red,

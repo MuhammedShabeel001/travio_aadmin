@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:travio_admin/controller/package_provider.dart';
@@ -6,7 +7,6 @@ import 'package:travio_admin/view/pages/product/package/add_package_page.dart';
 import 'package:travio_admin/view/widgets/product/package/package_card.dart';
 
 import '../../../widgets/global/search_bar.dart';
-import '../../../widgets/product/location/detail_card.dart';
 
 class PackagePage extends StatelessWidget {
   const PackagePage({super.key});
@@ -38,27 +38,8 @@ class PackagePage extends StatelessWidget {
               child: Consumer<TripPackageProvider>(
                 builder: (context, packageProvider, child) {
                   if (packageProvider.filteredPackages.isEmpty) {
-                    return ListView.builder(
-                      itemCount: 5, // Number of shimmer placeholders
-                      itemBuilder: (context, index) {
-                        return Shimmer.fromColors(
-                          baseColor: Color.fromARGB(255, 255, 248, 226),
-                          highlightColor: Colors.grey[100]!,
-                          child: Card(
-                            margin: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 15),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            elevation: 4,
-                            child: Container(
-                              height: 150,
-                              width: double.infinity,
-                              color: Colors.white,
-                            ),
-                          ),
-                        );
-                      },
+                    return Center(
+                      child: SvgPicture.asset('assets/icons/empty.svg'),
                     );
                   } else {
                     return ListView.builder(

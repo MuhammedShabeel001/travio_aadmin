@@ -10,7 +10,7 @@ import 'package:travio_admin/model/package_model.dart';
 class CarouselWidget extends StatelessWidget {
   final TripPackageModel tripPackage;
 
-  const CarouselWidget({Key? key, required this.tripPackage}) : super(key: key);
+  const CarouselWidget({super.key, required this.tripPackage});
 
   @override
   Widget build(BuildContext context) {

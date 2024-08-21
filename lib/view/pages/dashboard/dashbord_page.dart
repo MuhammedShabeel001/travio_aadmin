@@ -1,4 +1,3 @@
-import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:travio_admin/controller/package_provider.dart';
@@ -52,7 +51,7 @@ class DashbordPage extends StatelessWidget {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => LocationPage(),
+                                    builder: (context) => const LocationPage(),
                                   ));
                             },
                             child: CountCard(
@@ -80,7 +79,7 @@ class DashbordPage extends StatelessWidget {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => PackagePage(),
+                                    builder: (context) => const PackagePage(),
                                   ));
                             },
                             child: CountCard(
@@ -106,7 +105,7 @@ class DashbordPage extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => UsersPage(),
+                          builder: (context) => const UsersPage(),
                         ));
                   },
                   child: UserCount(

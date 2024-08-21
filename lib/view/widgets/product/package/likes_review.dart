@@ -4,7 +4,7 @@ import 'package:travio_admin/model/package_model.dart';
 class LikesAndReviewsWidget extends StatelessWidget {
   final TripPackageModel tripPackage;
 
-  const LikesAndReviewsWidget({Key? key, required this.tripPackage}) : super(key: key);
+  const LikesAndReviewsWidget({super.key, required this.tripPackage});
 
   @override
   Widget build(BuildContext context) {

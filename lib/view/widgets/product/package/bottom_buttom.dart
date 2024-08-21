@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BookButton extends StatelessWidget {
-  const BookButton({Key? key}) : super(key: key);
+  const BookButton({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +14,7 @@ class BookButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.orange,
           padding: const EdgeInsets.symmetric(vertical: 16),
+          // shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(13)),
           textStyle: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,

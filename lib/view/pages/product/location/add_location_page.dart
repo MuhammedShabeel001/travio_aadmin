@@ -19,15 +19,12 @@ class AddLocation extends StatelessWidget {
         backgroundColor: Colors.orangeAccent,
       ),
       body: Column(
-
         children: [
           Expanded(
             child: Padding(
-              // padding: const EdgeInsets.all(16.0),
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-            
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: GestureDetector(
-                onTap: () => FocusScope.of(context).unfocus(), // Unfocus keyboard on tap
+                onTap: () => FocusScope.of(context).unfocus(),
                 child: Form(
                   key: placeProvider.formKey,
                   child: SingleChildScrollView(
@@ -35,8 +32,8 @@ class AddLocation extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(
-                                height: 16,
-                              ),
+                          height: 16,
+                        ),
                         buildTextField(
                           context,
                           controller: placeProvider.nameController,
@@ -66,18 +63,19 @@ class AddLocation extends StatelessWidget {
                             decoration: InputDecoration(
                               labelText: 'Country',
                               filled: true,
-                              fillColor: Colors.orange[50], // Light orange background
+                              fillColor: Colors.orange[50],
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8.0),
                                 borderSide: BorderSide.none,
                               ),
-                              labelStyle: TextStyle(color: Colors.orange[700]), // Darker orange label
+                              labelStyle: TextStyle(color: Colors.orange[700]),
                             ),
                             controller: placeProvider.countryController,
                           ),
                           suggestionsCallback: (pattern) {
-                            return countries.where((country) =>
-                                country.toLowerCase().contains(pattern.toLowerCase()));
+                            return countries.where((country) => country
+                                .toLowerCase()
+                                .contains(pattern.toLowerCase()));
                           },
                           itemBuilder: (context, suggestion) {
                             return ListTile(
@@ -102,18 +100,19 @@ class AddLocation extends StatelessWidget {
                             decoration: InputDecoration(
                               labelText: 'Continent',
                               filled: true,
-                              fillColor: Colors.orange[50], // Light orange background
+                              fillColor: Colors.orange[50],
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8.0),
                                 borderSide: BorderSide.none,
                               ),
-                              labelStyle: TextStyle(color: Colors.orange[700]), // Darker orange label
+                              labelStyle: TextStyle(color: Colors.orange[700]),
                             ),
                             controller: placeProvider.continentController,
                           ),
                           suggestionsCallback: (pattern) {
-                            return continents.where((continent) =>
-                                continent.toLowerCase().contains(pattern.toLowerCase()));
+                            return continents.where((continent) => continent
+                                .toLowerCase()
+                                .contains(pattern.toLowerCase()));
                           },
                           itemBuilder: (context, suggestion) {
                             return ListTile(
@@ -143,10 +142,12 @@ class AddLocation extends StatelessWidget {
                         Wrap(
                           spacing: 8.0,
                           runSpacing: 8.0,
-                          children: placeProvider.availableActivities.map((activity) {
+                          children:
+                              placeProvider.availableActivities.map((activity) {
                             return ChoiceChip(
                               label: Text(activity),
-                              selected: placeProvider.selectedActivities.contains(activity),
+                              selected: placeProvider.selectedActivities
+                                  .contains(activity),
                               onSelected: (selected) {
                                 placeProvider.toggleActivity(activity);
                               },
@@ -163,19 +164,22 @@ class AddLocation extends StatelessWidget {
                                 decoration: InputDecoration(
                                   labelText: 'Add New Activity',
                                   filled: true,
-                                  fillColor: Colors.orange[50], // Light orange background
+                                  fillColor: Colors.orange[50],
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8.0),
                                     borderSide: BorderSide.none,
                                   ),
-                                  labelStyle: TextStyle(color: Colors.orange[700]), // Darker orange label
+                                  labelStyle:
+                                      TextStyle(color: Colors.orange[700]),
                                 ),
                               ),
                             ),
                             IconButton(
                               icon: const Icon(Icons.add),
                               onPressed: () {
-                                final newActivity = placeProvider.newActivityController.text.trim();
+                                final newActivity = placeProvider
+                                    .newActivityController.text
+                                    .trim();
                                 if (newActivity.isNotEmpty) {
                                   placeProvider.addActivity(newActivity);
                                   placeProvider.newActivityController.clear();
@@ -198,25 +202,30 @@ class AddLocation extends StatelessWidget {
                             scrollDirection: Axis.horizontal,
                             child: Row(
                               children: [
-                                ...placeProvider.images.asMap().entries.map((entry) {
+                                ...placeProvider.images
+                                    .asMap()
+                                    .entries
+                                    .map((entry) {
                                   final index = entry.key;
                                   final image = entry.value;
                                   return Stack(
                                     children: [
                                       Container(
-                                        margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 4.0),
                                         child: Image.file(
                                           image,
-                                          width: 100, // Fixed width for images
-                                          height: 100, // Fixed height for images
+                                          width: 100,
+                                          height: 100,
                                           fit: BoxFit.cover,
                                         ),
                                       ),
                                       Positioned(
                                         right: -5,
-                                        top: -10 ,
+                                        top: -10,
                                         child: IconButton(
-                                          icon: const Icon(Icons.remove_circle, color: Colors.red),
+                                          icon: const Icon(Icons.remove_circle,
+                                              color: Colors.red),
                                           onPressed: () {
                                             placeProvider.removeImage(index);
                                           },
@@ -227,10 +236,8 @@ class AddLocation extends StatelessWidget {
                                 }),
                                 Container(
                                   decoration: BoxDecoration(
-                                    border: Border.all(
-                                      style: BorderStyle.solid
-                                    )
-                                  ),
+                                      border:
+                                          Border.all(style: BorderStyle.solid)),
                                   height: 100,
                                   width: 100,
                                   child: Center(
@@ -246,8 +253,6 @@ class AddLocation extends StatelessWidget {
                             ),
                           ),
                         ),
-                        // const SizedBox(height: 16.0),
-                        
                       ],
                     ),
                   ),
@@ -255,12 +260,11 @@ class AddLocation extends StatelessWidget {
               ),
             ),
           ),
- Padding(
-   padding: const EdgeInsets.all(8.0),
-   child: ElevatedButton(
-    onPressed: () {
-      if (placeProvider.formKey.currentState?.validate() ??
-                    false) {
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              onPressed: () {
+                if (placeProvider.formKey.currentState?.validate() ?? false) {
                   if (placeProvider.selectedActivities.isEmpty) {
                     BotToast.showText(
                         text: 'Please select at least one activity.');
@@ -268,45 +272,28 @@ class AddLocation extends StatelessWidget {
                     return;
                   }
 
-                  if (placeProvider.images.isEmpty){
+                  if (placeProvider.images.isEmpty) {
                     BotToast.showText(text: 'Please select at least one image');
 
                     return;
                   }
 
-                  // if (placeProvider.selectedTransportOp.isEmpty) {
-                  //   BotToast.showText(
-                  //       text: 'Please select at least  one transport option.');
-
-                  //   return;
-                  // }
-                placeProvider.submitForm();
-                //   Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //         builder: (_) => TripPackagePlanningPage()),
-                //   );
+                  placeProvider.submitForm();
                 }
-    },
-                            // onPressed: placeProvider.isSubmitting ? null : () {
-
-                              
-                            //   // placeProvider.submitForm();
-                            // },
-                            child: placeProvider.isSubmitting 
-                                ? const CustomLoading()
-                                : const Text('Submit',
-                  style: TextStyle(color: Colors.white),
-                                
-                                ),
-
-                                style: ElevatedButton.styleFrom(
+              },
+              style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orangeAccent,
                   minimumSize: const Size(double.infinity, 50),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15))),
-                          ),
- ), 
+              child: placeProvider.isSubmitting
+                  ? const CustomLoading()
+                  : const Text(
+                      'Submit',
+                      style: TextStyle(color: Colors.white),
+                    ),
+            ),
+          ),
         ],
       ),
     );
@@ -324,14 +311,13 @@ class AddLocation extends StatelessWidget {
       minLines: 1,
       decoration: InputDecoration(
         labelText: label,
-        
         filled: true,
-        fillColor: Colors.orange[50], // Light orange background
+        fillColor: Colors.orange[50],
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
           borderSide: BorderSide.none,
         ),
-        labelStyle: TextStyle(color: Colors.orange[700]), // Darker orange label
+        labelStyle: TextStyle(color: Colors.orange[700]),
       ),
       validator: validator,
     );
