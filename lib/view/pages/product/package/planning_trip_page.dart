@@ -14,6 +14,7 @@ class TripPackagePlanningPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 0,
         title: const Text('Planning package'),
         backgroundColor: Colors.orangeAccent,
       ),

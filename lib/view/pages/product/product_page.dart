@@ -17,7 +17,7 @@ class ProductPage extends StatelessWidget {
           backgroundColor: Colors.orangeAccent,
       
           title: const Text(
-            'Product',
+            '',
             style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
           ),
           bottom: const 

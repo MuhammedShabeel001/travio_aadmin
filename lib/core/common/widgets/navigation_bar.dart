@@ -18,6 +18,7 @@ class TNavBar extends StatefulWidget {
 }
 
 class _TNavBarState extends State<TNavBar> {
+  int? intex;
   int currentIndex = 0;
 
   final List<Widget> _pages = [

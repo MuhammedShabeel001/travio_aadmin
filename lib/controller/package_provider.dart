@@ -3,11 +3,14 @@ import 'dart:developer';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:travio_admin/core/common/widgets/navigation_bar.dart';
 import 'dart:io';
 
 import 'package:travio_admin/model/package_model.dart';
+import 'package:travio_admin/view/pages/product/package/package_page.dart';
 
 import '../utils/consts/constants.dart';
 
@@ -55,11 +58,7 @@ class TripPackageProvider with ChangeNotifier {
   String _searchQuery = '';
 
   final List<String> _availableActivities = [
-    'Hiking',
-    'Swimming',
-    'Sightseeing',
-    'Shopping',
-    'Dining',
+    
   ];
 
   final List<String> _transportOptions = [
@@ -67,6 +66,8 @@ class TripPackageProvider with ChangeNotifier {
     'Train',
     'Bus',
     'Ship',
+    'Yatch',
+
   ];
 
     void addCountry(String country) {
@@ -238,6 +239,8 @@ Future<void> submitForm(BuildContext context) async {
 
       _resetForm();
       Navigator.pop(context);
+      Navigator.pop(context);
+      // Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => TNavBar(),), (route) => false,);
     } catch (e) {
       log('Error uploading data: $e');
       BotToast.showText(text: 'Error submitting data');

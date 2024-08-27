@@ -15,6 +15,7 @@ class TripPackageDetailsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 0,
         title: const Text('Add Package Details'),
         backgroundColor: Colors.orangeAccent,
       ),
