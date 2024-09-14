@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:travio_admin/model/package_model.dart';
 import 'package:travio_admin/controller/package_provider.dart';
+import 'package:travio_admin/view/pages/product/package/add_package_page.dart';
 
 import '../../../widgets/product/package/bottom_buttom.dart';
 import '../../../widgets/product/package/carousal_images.dart';
@@ -17,67 +18,68 @@ class TripPackageDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Consumer<TripPackageProvider>(
-          builder: (context, packageProvider, child) {
-            // Precache images
-            for (var imageUrl in tripPackage.images) {
-              precacheImage(NetworkImage(imageUrl), context);
-            }
-
-            return DefaultTabController(
-              length: 2,
-              child: NestedScrollView(
-                headerSliverBuilder: (context, innerBoxIsScrolled) {
-                  return [
-                    SliverAppBar(
-                      expandedHeight: 350.0,
-                      pinned: true,
-                      automaticallyImplyLeading: false,
-                      flexibleSpace: FlexibleSpaceBar(
-                        background: CarouselWidget(tripPackage: tripPackage),
-                      ),
-                      bottom: const PreferredSize(
-                        preferredSize: Size.fromHeight(100.0),
-                        child: Column(
-                          children: [
-                            TabBar(
-                              indicatorColor: Colors.white,
-                              labelColor: Colors.white,
-                              tabs: [
-                                Tab(text: "About"),
-                                Tab(text: "Reviews"),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
+    return Scaffold(
+      body: Consumer<TripPackageProvider>(
+        builder: (context, packageProvider, child) {
+          // Precache images
+          for (var imageUrl in tripPackage.images) {
+            precacheImage(NetworkImage(imageUrl), context);
+          }
+    
+          return DefaultTabController(
+            length: 3,
+            child: NestedScrollView(
+              headerSliverBuilder: (context, innerBoxIsScrolled) {
+                return [
+                  SliverAppBar(
+                    expandedHeight: 350.0,
+                    pinned: true,
+                    automaticallyImplyLeading: false,
+                    flexibleSpace: FlexibleSpaceBar(
+                      background: CarouselWidget(tripPackage: tripPackage),
                     ),
-                  ];
-                },
-                body: TabBarView(
-                  children: [
-                    SingleChildScrollView(
-                      padding: const EdgeInsets.all(20),
+                    bottom: const PreferredSize(
+                      preferredSize: Size.fromHeight(100.0),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          PackageInfoWidget(tripPackage: tripPackage),
-                          const SizedBox(height: 24),
-                          LikesAndReviewsWidget(tripPackage: tripPackage),
+                          TabBar(
+                            indicatorColor: Colors.black,
+                            labelColor: Colors.black,
+                            tabs: [
+                              Tab(text: "About"),
+                              Tab(text: "Reviews"),
+                              Tab(text: "Users"),
+    
+                            ],
+                          ),
                         ],
                       ),
                     ),
-                    const ReviewsTab(),
-                  ],
-                ),
+                  ),
+                ];
+              },
+              body: TabBarView(
+                children: [
+                  SingleChildScrollView(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        PackageInfoWidget(tripPackage: tripPackage),
+                        const SizedBox(height: 24),
+                        LikesAndReviewsWidget(tripPackage: tripPackage),
+                      ],
+                    ),
+                  ),
+                  const ReviewsTab(),
+                  const ReviewsTab(),
+                ],
               ),
-            );
-          },
-        ),
-        bottomNavigationBar: const BookButton(),
+            ),
+          );
+        },
       ),
+      bottomNavigationBar:  BookButton(tripPackage: tripPackage,  tripPackageId: tripPackage.id),
     );
   }
 }

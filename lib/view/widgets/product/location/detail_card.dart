@@ -1,4 +1,3 @@
-import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,8 +12,6 @@ class DetailCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final placeProvider = Provider.of<PlaceProvider>(context, listen: false);
-
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -31,171 +28,115 @@ class DetailCard extends StatelessWidget {
         ),
         elevation: 4,
         color: Colors.white,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Stack(
           children: [
-            Stack(
-              children: [
-                ClipRRect(
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(12)),
-                  child: Image.network(
-                    place.images.first,
-                    height: 150,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Positioned(
-                  top: 10,
-                  right: 10,
-                  child: Container(
-                    padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.5),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      '${place.images.length} Images',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+            // Image section
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.network(
+                place.images.first,
+                height: 200,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    place.name,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
+
+            // Details stacked on top of the image
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.6),
+                  borderRadius: const BorderRadius.vertical(
+                    bottom: Radius.circular(12),
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    '${place.country}, ${place.continent}',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey[700],
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    place.description,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.edit, color: Colors.orange),
+                ),
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Place name
+                    Text(
+                      place.name,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: Colors.white,
                       ),
-                      IconButton(
-                        onPressed: () {
-                          showDeleteConfirmationDialog(placeProvider, place.id);
-                        },
-                        icon: const Icon(Icons.delete, color: Colors.red),
+                    ),
+                    const SizedBox(height: 4),
+
+                    // Location (Country, Continent)
+                    Text(
+                      '${place.country}, ${place.continent}',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.white70,
                       ),
-                    ],
-                  ),
-                ],
+                    ),
+                    const SizedBox(height: 4),
+
+                    // Description, truncated
+                    Text(
+                      place.description,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+
+                    // Number of images displayed in a small container
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Image count
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 4,
+                            horizontal: 8,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.orange,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            '${place.images.length} Images',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                        // Add any other detail here (e.g., ratings, price)
+                        const Row(
+                          children: [
+                            const Icon(Icons.star, color: Colors.yellow, size: 18),
+                            const SizedBox(width: 4),
+                            Text(
+                              'sdjf',
+                              // '${place.rating}/5',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
         ),
       ),
-    );
-  }
-
-  void showDeleteConfirmationDialog(
-      PlaceProvider placeProvider, String placeId) {
-    BotToast.showCustomNotification(
-      toastBuilder: (cancelFunc) {
-        return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 20),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 10,
-                spreadRadius: 2,
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Delete Location',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.orange,
-                  fontSize: 18,
-                ),
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                'Are you sure you want to delete this location?',
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      cancelFunc();
-                    },
-                    style: TextButton.styleFrom(
-                      foregroundColor: Colors.grey[700],
-                      textStyle: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    child: const Text('Cancel'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      cancelFunc();
-                      placeProvider.deleteLocation(placeId);
-                    },
-                    style: TextButton.styleFrom(
-                      foregroundColor: Colors.red,
-                      textStyle: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    child: const Text('Delete'),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-      duration: null,
-      onlyOne: true,
-      backButtonBehavior: BackButtonBehavior.none,
-      crossPage: true,
     );
   }
 }

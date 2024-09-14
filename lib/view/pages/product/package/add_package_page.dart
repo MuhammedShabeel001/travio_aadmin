@@ -62,9 +62,9 @@ class TripPackageDetailsPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 16),
                         TypeAheadFormField<String>(
-  textFieldConfiguration: TextFieldConfiguration(
-    controller: tripPackageProvider.countryController,
-   decoration: InputDecoration(
+                          textFieldConfiguration: TextFieldConfiguration(
+                            controller: tripPackageProvider.countryController,
+                            decoration: InputDecoration(
                               labelText: 'Country',
                               filled: true,
                               fillColor: Colors.orange[50],
@@ -74,43 +74,46 @@ class TripPackageDetailsPage extends StatelessWidget {
                               ),
                               labelStyle: TextStyle(color: Colors.orange[700]),
                             ),
-  ),
-  suggestionsCallback: (pattern) {
-    return tripPackageProvider.availableCountries.where(
-      (country) => country.toLowerCase().contains(pattern.toLowerCase()),
-    );
-  },
-  itemBuilder: (context, suggestion) {
-    return ListTile(
-      title: Text(suggestion),
-    );
-  },
-  onSuggestionSelected: (suggestion) {
-    tripPackageProvider.toggleCountrySelection(suggestion);
-    tripPackageProvider.countryController.clear();
-  },
-  hideOnEmpty: true,
-  noItemsFoundBuilder: (context) => Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: Text(
-      'No Countries Found',
-      style: TextStyle(fontSize: 16, color: Colors.grey),
-    ),
-  ),
-),
-Wrap(
-  spacing: 8.0,
-  runSpacing: 4.0,
-  children: tripPackageProvider.selectedCountries.map((country) {
-    return Chip(
-      label: Text(country),
-      onDeleted: () => tripPackageProvider.toggleCountrySelection(country),
-    );
-  }).toList(),
-),
-
-
-
+                          ),
+                          suggestionsCallback: (pattern) {
+                            return tripPackageProvider.availableCountries.where(
+                              (country) => country
+                                  .toLowerCase()
+                                  .contains(pattern.toLowerCase()),
+                            );
+                          },
+                          itemBuilder: (context, suggestion) {
+                            return ListTile(
+                              title: Text(suggestion),
+                            );
+                          },
+                          onSuggestionSelected: (suggestion) {
+                            tripPackageProvider
+                                .toggleCountrySelection(suggestion);
+                            tripPackageProvider.countryController.clear();
+                          },
+                          hideOnEmpty: true,
+                          noItemsFoundBuilder: (context) => Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              'No Countries Found',
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.grey),
+                            ),
+                          ),
+                        ),
+                        Wrap(
+                          spacing: 8.0,
+                          runSpacing: 4.0,
+                          children: tripPackageProvider.selectedCountries
+                              .map((country) {
+                            return Chip(
+                              label: Text(country),
+                              onDeleted: () => tripPackageProvider
+                                  .toggleCountrySelection(country),
+                            );
+                          }).toList(),
+                        ),
                         const SizedBox(height: 16),
                         CustomTextForm(
                           tripPackageProvider: tripPackageProvider,
@@ -263,7 +266,6 @@ Wrap(
                           ),
                         ),
                         const SizedBox(height: 16.0),
-
                         Row(
                           children: [
                             Flexible(
@@ -313,9 +315,6 @@ Wrap(
               onPressed: () {
                 if (tripPackageProvider.formKey.currentState?.validate() ??
                     false) {
-
-
-
                   if (tripPackageProvider.selectedActivities.isEmpty) {
                     BotToast.showText(
                         text: 'Please select at least one activity.');

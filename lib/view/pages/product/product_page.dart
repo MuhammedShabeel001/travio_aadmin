@@ -11,17 +11,10 @@ class ProductPage extends StatelessWidget {
       length: 2,
       child: Scaffold(
         backgroundColor: Colors.orangeAccent,
-        appBar: 
-        
-        AppBar(
+        appBar: AppBar(
           backgroundColor: Colors.orangeAccent,
-      
-          title: const Text(
-            '',
-            style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-          ),
-          bottom: const 
-        TabBar(
+          toolbarHeight: 0,
+          bottom: const TabBar(
               indicatorWeight: 13,
               indicatorSize: TabBarIndicatorSize.tab,
               physics: BouncingScrollPhysics(),
@@ -33,16 +26,16 @@ class ProductPage extends StatelessWidget {
                       BorderRadius.vertical(top: Radius.circular(15))),
               tabs: [
                 Tab(
-                  text: 'Locations',
+                  text: 'Packages',
                 ),
                 Tab(
-                  text: 'Packages',
+                  text: 'Locations',
                 ),
               ]),
         ),
         body: const TabBarView(children: [
-          LocationPage(),
           PackagePage(),
+          LocationPage(),
         ]),
       ),
     );

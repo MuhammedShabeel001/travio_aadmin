@@ -1,60 +1,87 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:travio_admin/controller/package_provider.dart';
 import 'package:travio_admin/model/package_model.dart';
+
+import '../../../../controller/edit_provider.dart';
+// import 'package:travio_admin/providers/edit_package_provider.dart';
 
 class PackageInfoWidget extends StatelessWidget {
   final TripPackageModel tripPackage;
 
-  const PackageInfoWidget({super.key, required this.tripPackage});
+  const PackageInfoWidget({Key? key, required this.tripPackage}) : super(key: key);
+
+  Widget _buildEditableText(BuildContext context, String field, TextStyle style) {
+    return Consumer<TripPackageProvider>(
+      builder: (context, provider, child) {
+        String text = provider.currentPackage?.getFieldValue(field)?.toString() ?? '';
+        return GestureDetector(
+          onLongPress: () async {
+            await provider.showEditDialog(context, field);
+            // No need to call setState or notifyListeners here, as the provider will handle that
+          },
+          child: Text(text, style: style),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    // Set the current package when the widget is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<TripPackageProvider>(context, listen: false).setCurrentPackage(tripPackage);
+    });
+
+    return Consumer<TripPackageProvider>(
+      builder: (context, provider, child) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              tripPackage.name,
-              style: const TextStyle(
+            _buildEditableText(
+              context,
+              'name',
+              const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
               ),
             ),
-            IconButton(
-              icon: const Icon(Icons.favorite_border, color: Colors.red),
-              onPressed: () {
-                // Handle favorite action
-              },
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        Text(
-          tripPackage.description,
-          style: const TextStyle(
+            const SizedBox(height: 8),
+            _buildEditableText(
+              context,
+              'description',
+          const TextStyle(
             fontSize: 16,
             color: Colors.grey,
             height: 1.5,
           ),
         ),
         const SizedBox(height: 16),
-        Center(
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.white,
+          ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                '\$${tripPackage.realPrice}',
-                style: const TextStyle(
+              _buildEditableText(
+                context,
+                'real_price',
+                const TextStyle(
                   fontSize: 16,
                   decoration: TextDecoration.lineThrough,
                   color: Colors.grey,
                 ),
               ),
               const SizedBox(height: 4),
-              Text(
-                '\$${tripPackage.offerPrice}',
-                style: const TextStyle(
+              _buildEditableText(
+                context,
+                'offer_price',
+                const TextStyle(
                   fontSize: 28,
                   color: Colors.red,
                   fontWeight: FontWeight.bold,
@@ -73,34 +100,40 @@ class PackageInfoWidget extends StatelessWidget {
           ),
         ),
         const Divider(),
-        Column(
-          children: tripPackage.dailyPlan.entries.map((entry) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Day ${entry.key + 1}: ',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  Expanded(
-                    child: Text(
-                      entry.value,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.black54,
+        Consumer<TripPackageProvider>(
+          builder: (context, editProvider, child) {
+            Map<int, String> dailyPlan = editProvider.currentPackage?.dailyPlan ?? {};
+            return Column(
+              children: dailyPlan.entries.map((entry) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Day ${entry.key + 1}: ',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
                       ),
-                    ),
+                      Expanded(
+                        child: _buildEditableText(
+                          context,
+                          'daily_plan.${entry.key}',
+                          const TextStyle(
+                            fontSize: 16,
+                            color: Colors.black54,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                );
+              }).toList(),
             );
-          }).toList(),
+          },
         ),
         const SizedBox(height: 24),
         const Text(
@@ -112,9 +145,10 @@ class PackageInfoWidget extends StatelessWidget {
           ),
         ),
         const Divider(),
-        Text(
-          tripPackage.activities.join(', '),
-          style: const TextStyle(
+        _buildEditableText(
+          context,
+          'activities',
+          const TextStyle(
             fontSize: 16,
             color: Colors.black54,
             height: 1.5,
@@ -130,9 +164,10 @@ class PackageInfoWidget extends StatelessWidget {
           ),
         ),
         const Divider(),
-        Text(
-          tripPackage.transportOptions.join(', '),
-          style: const TextStyle(
+        _buildEditableText(
+          context,
+          'transport_options',
+          const TextStyle(
             fontSize: 16,
             color: Colors.black54,
             height: 1.5,
@@ -140,5 +175,6 @@ class PackageInfoWidget extends StatelessWidget {
         ),
       ],
     );
-  }
+ }
+    );}
 }

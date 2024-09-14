@@ -9,18 +9,10 @@ class LikesAndReviewsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Row(
-          children: [
-            const Icon(Icons.favorite, color: Colors.red),
-            const SizedBox(width: 8),
-            Text(
-              '${tripPackage.likeCount} Likes',
-              style: const TextStyle(color: Colors.black87),
-            ),
-          ],
-        ),
+       
         Row(
           children: [
             const Icon(Icons.star, color: Colors.amber),

@@ -1,26 +1,94 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:travio_admin/model/package_model.dart';
+import 'package:travio_admin/view/widgets/global/delete_dialog.dart';
+// import 'package:travio_admin/view/widgets/product/package/edit_package_page.dart';
+import '../../../../controller/package_provider.dart';
 
 class BookButton extends StatelessWidget {
-  const BookButton({super.key});
+  final TripPackageModel tripPackage;
+  final String tripPackageId; // Pass the trip package ID from the parent widget
+
+  const  BookButton({super.key, required this.tripPackageId, required this.tripPackage});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: ElevatedButton(
-        onPressed: () {
-          // Handle booking
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.orange,
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          // shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(13)),
-          textStyle: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+    // Fetch the provider
+    final tripPackageProvider = Provider.of<TripPackageProvider>(context, listen: false);
+
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      width: double.infinity,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Flexible(
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  // Navigator.of(context).push(CupertinoPageRoute(builder: (context) => EditTripPackagePage(package: tripPackage),));
+                  // Edit action
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(13),
+                    side: const BorderSide(
+                      color: Colors.black, // Black border color
+                      width: 2.0, // Border width
+                    ),
+                  ),
+                  textStyle: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    Icon(Icons.edit, color: Colors.black),
+                    SizedBox(width: 10),
+                    Text('Edit', style: TextStyle(color: Colors.black)),
+                  ],
+                ),
+              ),
+            ),
           ),
-        ),
-        child: const Text('Book Now',style: TextStyle(color: Colors.white),),
+          const SizedBox(width: 10),
+          Flexible(
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  // Call the delete confirmation dialog
+                  showDeleteConfirmationDialog(context, tripPackageProvider, tripPackageId);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.redAccent,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(13),
+                  ),
+                  textStyle: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.delete, color: Colors.white),
+                    SizedBox(width: 10),
+                    Text('Delete', style: TextStyle(color: Colors.white)),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

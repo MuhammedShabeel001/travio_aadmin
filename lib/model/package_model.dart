@@ -101,3 +101,36 @@ class TripPackageModel {
     };
   }
 }
+
+extension TripPackageModelExtension on TripPackageModel {
+  dynamic getFieldValue(String field) {
+    switch (field) {
+      case 'name':
+        return name;
+      case 'description':
+        return description;
+      case 'real_price':
+        return realPrice;
+      case 'offer_price':
+        return offerPrice;
+      case 'activities':
+        return activities.join(', ');
+      case 'transport_options':
+        return transportOptions.join(', ');
+      case 'number_of_days':
+        return numberOfDays;
+      case 'number_of_nights':
+        return numberOfNights;
+      case 'total_number_of_days':
+        return totalDays;
+      case 'locations':
+        return locations.join(', ');
+      default:
+        if (field.startsWith('daily_plan.')) {
+          int day = int.parse(field.split('.')[1]);
+          return dailyPlan[day];
+        }
+        return null;
+    }
+  }
+}
