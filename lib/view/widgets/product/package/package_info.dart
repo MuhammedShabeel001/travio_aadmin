@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:travio_admin/controller/package_provider.dart';
 import 'package:travio_admin/model/package_model.dart';
 
-import '../../../../controller/edit_provider.dart';
+// import '../../../../controller/edit_provider.dart';
 // import 'package:travio_admin/providers/edit_package_provider.dart';
 
 class PackageInfoWidget extends StatelessWidget {

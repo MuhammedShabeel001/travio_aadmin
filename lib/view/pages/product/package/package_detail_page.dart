@@ -10,7 +10,6 @@ import '../../../widgets/product/package/likes_review.dart';
 import '../../../widgets/product/package/package_info.dart';
 import '../../../widgets/product/package/review_details.dart';
 
-
 class TripPackageDetailPage extends StatelessWidget {
   final TripPackageModel tripPackage;
 
@@ -25,7 +24,7 @@ class TripPackageDetailPage extends StatelessWidget {
           for (var imageUrl in tripPackage.images) {
             precacheImage(NetworkImage(imageUrl), context);
           }
-    
+
           return DefaultTabController(
             length: 3,
             child: NestedScrollView(
@@ -49,7 +48,6 @@ class TripPackageDetailPage extends StatelessWidget {
                               Tab(text: "About"),
                               Tab(text: "Reviews"),
                               Tab(text: "Users"),
-    
                             ],
                           ),
                         ],
@@ -71,15 +69,17 @@ class TripPackageDetailPage extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const ReviewsTab(),
-                  const ReviewsTab(),
+                  ReviewsTab(tripPackage: tripPackage),
+                  ReviewsTab(tripPackage: tripPackage),
+                  // const ReviewsTab(),
                 ],
               ),
             ),
           );
         },
       ),
-      bottomNavigationBar:  BookButton(tripPackage: tripPackage,  tripPackageId: tripPackage.id),
+      bottomNavigationBar:
+          BookButton(tripPackage: tripPackage, tripPackageId: tripPackage.id),
     );
   }
 }

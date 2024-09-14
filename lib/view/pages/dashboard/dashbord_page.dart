@@ -7,6 +7,7 @@ import 'package:travio_admin/view/pages/product/location/location_page.dart';
 import 'package:travio_admin/view/pages/product/package/package_page.dart';
 import 'package:travio_admin/view/widgets/Dashbord/count_card.dart';
 import 'package:travio_admin/view/widgets/global/t_app_bar.dart';
+import 'package:travio_admin/view/widgets/product/package/package_card.dart';
 
 import '../../../controller/user_provider.dart';
 import '../../widgets/Dashbord/user_count.dart';
@@ -28,100 +29,136 @@ class DashbordPage extends StatelessWidget {
     });
 
     return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: tAppBar('Dashbord'),
-        body: ListView(children: [
-          SizedBox(
-            height: 220,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Expanded(
-                    flex: 1,
-                    child: Consumer<PlaceProvider>(
-                      builder: (context, placeProvider, child) {
-                        if (placeProvider.filteredPlaces.isEmpty) {
-                          return const CountCard(
-                            count: '0',
-                            label: 'Locatioins',
-                          );
-                        } else {
-                          return InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const LocationPage(),
-                                  ));
-                            },
-                            child: CountCard(
-                                count: placeProvider.filteredPlaces.length
-                                    .toString(),
-                                label: placeProvider.filteredPlaces.length <= 1
-                                    ? 'Location'
-                                    : 'Locations'),
-                          );
-                        }
-                      },
-                    )),
-                 Expanded(
-                    flex: 1,
-                    child: Consumer<TripPackageProvider>(
-                      builder: (context, packageProvider, child) {
-                        if (packageProvider.filteredPackages.isEmpty) {
-                          return const CountCard(
-                            count: '0', 
-                            label: 'Packages',
-                          );
-                        } else {
-                          return InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const PackagePage(),
-                                  ));
-                            },
-                            child: CountCard(
-                                count: packageProvider.filteredPackages.length
-                                    .toString(),
-                                label: packageProvider.filteredPackages.length <= 1
-                                    ? 'Package'
-                                    : 'packages'),
-                          );
-                        }
-                      },
-                    )),
-              ],
+      backgroundColor: Colors.white,
+      appBar: tAppBar('Dashbord'),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+        SizedBox(
+          height: 220,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(
+                  flex: 1,
+                  child: Consumer<PlaceProvider>(
+                    builder: (context, placeProvider, child) {
+                      if (placeProvider.filteredPlaces.isEmpty) {
+                        return const CountCard(
+                          count: '0',
+                          label: 'Locatioins',
+                        );
+                      } else {
+                        return InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const LocationPage(),
+                                ));
+                          },
+                          child: CountCard(
+                              count: placeProvider.filteredPlaces.length
+                                  .toString(),
+                              label: placeProvider.filteredPlaces.length <= 1
+                                  ? 'Location'
+                                  : 'Locations'),
+                        );
+                      }
+                    },
+                  )),
+              Expanded(
+                  flex: 1,
+                  child: Consumer<TripPackageProvider>(
+                    builder: (context, packageProvider, child) {
+                      if (packageProvider.filteredPackages.isEmpty) {
+                        return const CountCard(
+                          count: '0',
+                          label: 'Packages',
+                        );
+                      } else {
+                        return InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const PackagePage(),
+                                ));
+                          },
+                          child: CountCard(
+                              count: packageProvider.filteredPackages.length
+                                  .toString(),
+                              label:
+                                  packageProvider.filteredPackages.length <= 1
+                                      ? 'Package'
+                                      : 'packages'),
+                        );
+                      }
+                    },
+                  )),
+            ],
+          ),
+        ),
+        Consumer<UserProvider>(
+          builder: (context, userProvider, child) {
+            if (userProvider.filteredUsers.isEmpty) {
+              return const UserCount(count: '0', label: 'Active usrs');
+            } else {
+              return InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const UsersPage(),
+                      ));
+                },
+                child: UserCount(
+                    count: userProvider.filteredUsers.length.toString(),
+                    label: userProvider.filteredUsers.length <= 1
+                        ? 'Active user'
+                        : 'Active users'),
+              );
+            }
+          },
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text('Reecently added',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600),),
+        ),
+        Divider(),
+        Flexible(
+          child: SizedBox( 
+            // color: Colors.green,
+            height: double.infinity,
+            child: Consumer<TripPackageProvider>(
+              builder: (context, provider, child) {
+                if (provider.package.isEmpty) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                return ListView.builder(
+                  itemCount: provider.package.length,
+                  itemBuilder: (context, index) {
+                    final package = provider.package[index];
+                    return TripPackageCard(
+                      height: 150,
+                        tripPackage: packageProvider.filteredPackages[index]);
+                  },
+                );
+              },
             ),
           ),
-          Consumer<UserProvider>(
-            builder: (context, userProvider, child) {
-              if (userProvider.filteredUsers.isEmpty) {
-                return const UserCount(count: '0', label: 'Active usrs');
-              } else {
-                return InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const UsersPage(),
-                        ));
-                  },
-                  child: UserCount(
-                      count: userProvider.filteredUsers.length.toString(),
-                      label: userProvider.filteredUsers.length <= 1
-                          ? 'Active user'
-                          : 'Active users'),
-                );
-              }
-            },
-          )
-        ]),
+        )
+      ]),
 //         floatingActionButton: FloatingActionButton.small(onPressed: (){
 // // BotToast.showCustomNotification(toastBuilder: toastBuilder);
 
 //         }),
-        );
+    );
   }
 }

@@ -20,75 +20,35 @@ class BookButton extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(8.0),
       width: double.infinity,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Flexible(
-            child: SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  // Navigator.of(context).push(CupertinoPageRoute(builder: (context) => EditTripPackagePage(package: tripPackage),));
-                  // Edit action
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(13),
-                    side: const BorderSide(
-                      color: Colors.black, // Black border color
-                      width: 2.0, // Border width
-                    ),
-                  ),
-                  textStyle: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    Icon(Icons.edit, color: Colors.black),
-                    SizedBox(width: 10),
-                    Text('Edit', style: TextStyle(color: Colors.black)),
-                  ],
-                ),
+      child: Flexible(
+        child: SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: () {
+              // Call the delete confirmation dialog
+              showDeleteConfirmationDialog(context, tripPackageProvider, tripPackageId);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.redAccent,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(13),
+              ),
+              textStyle: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
             ),
-          ),
-          const SizedBox(width: 10),
-          Flexible(
-            child: SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  // Call the delete confirmation dialog
-                  showDeleteConfirmationDialog(context, tripPackageProvider, tripPackageId);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.redAccent,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(13),
-                  ),
-                  textStyle: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.delete, color: Colors.white),
-                    SizedBox(width: 10),
-                    Text('Delete', style: TextStyle(color: Colors.white)),
-                  ],
-                ),
-              ),
+            child: const Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.delete, color: Colors.white),
+                SizedBox(width: 10),
+                Text('Delete', style: TextStyle(color: Colors.white)),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }

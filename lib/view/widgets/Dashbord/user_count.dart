@@ -12,7 +12,7 @@ class UserCount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  SizedBox(
-      height: 180,
+      height: 140,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10 ),
         child: Card( 

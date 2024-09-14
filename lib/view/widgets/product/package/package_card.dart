@@ -1,9 +1,10 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../controller/package_provider.dart';
-// import '../../../../controller/trip_package_provider.dart';
+// / import '../../../../controller/trip_package_provider.dart';
 import '../../../../model/package_model.dart';
 import '../../../pages/product/package/package_detail_page.dart';
 import '../../global/delete_dialog.dart';
@@ -12,8 +13,13 @@ import '../../global/delete_dialog.dart';
 
 class TripPackageCard extends StatelessWidget {
   final TripPackageModel tripPackage;
+  double? height;
 
-  const TripPackageCard({super.key, required this.tripPackage});
+   TripPackageCard({
+    super.key,
+    required this.tripPackage,
+    this.height,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +36,9 @@ class TripPackageCard extends StatelessWidget {
           ),
         );
       },
+      // onLongPress: () {
+      //   showDeleteConfirmationDialog(context, tripPackageProvider, tripPackageProvider.currentPackage!.id);
+      // },
       child: Card(
         margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         shape: RoundedRectangleBorder(
@@ -48,13 +57,13 @@ class TripPackageCard extends StatelessWidget {
                     tripPackage.images.isNotEmpty
                         ? tripPackage.images.first
                         : 'https://via.placeholder.com/150',
-                    height: 200,
+                    height: height ?? 200,
                     width: double.infinity,
                     fit: BoxFit.cover,
                   ),
                   // Gradient overlay
                   Container(
-                    height: 200,
+                    height:height ?? 200,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
@@ -107,29 +116,7 @@ class TripPackageCard extends StatelessWidget {
               ),
             ),
             // Actions (edit & delete) as small floating icons
-            // Positioned(
-            //   top: 10,
-            //   right: 10,
-            //   child: Row(
-            //     children: [
-            //       IconButton(
-            //         onPressed: () {
-            //           // TODO: Add edit action
-            //         },
-            //         icon: const Icon(Icons.edit,
-            //             color: Colors.orangeAccent, size: 20),
-            //       ),
-            //       IconButton(
-            //         onPressed: () {
-            //           // showDeleteConfirmationDialog(
-            //           //     true, context, tripPackageProvider, tripPackage.id);
-            //         },
-            //         icon: const Icon(Icons.delete,
-            //             color: Colors.redAccent, size: 20),
-            //       ),
-            //     ],
-            //   ),
-            // ),
+
             // Number of images indicator
             Positioned(
               top: 10,

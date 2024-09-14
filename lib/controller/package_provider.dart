@@ -236,6 +236,25 @@ Future<void> updatePackageField(String field, dynamic value) async {
     }
   }
 
+  Future<void> fetchLastAddedPackages() async {
+    try {
+      QuerySnapshot querySnapshot = await db
+          .collection('trip_packages')
+          .orderBy('created_at', descending: true) // Assuming you have a 'created_at' field
+          .limit(3)
+          .get();
+
+      _package = querySnapshot.docs
+          .map((doc) => TripPackageModel.fromMap(doc.data() as Map<String, dynamic>))
+          .toList();
+
+      notifyListeners();
+    } catch (e) {
+      log('Error fetching last added packages: $e');
+      BotToast.showText(text: 'Error fetching last added packages');
+    }
+  }
+
   void updateIndex(int index) {
     _currentIndex = index;
     notifyListeners();
