@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:travio_admin/model/package_model.dart';
 import 'package:travio_admin/controller/package_provider.dart';
-import 'package:travio_admin/view/pages/product/package/add_package_page.dart';
 import 'package:travio_admin/view/widgets/product/package/booked_user_list.dart';
 
 import '../../../widgets/product/package/bottom_buttom.dart';

@@ -14,7 +14,7 @@ class ReviewProvider with ChangeNotifier {
       .get();
       
   reviews = await Future.wait(snapshot.docs.map((doc) async {
-    final data = doc.data() as Map<String, dynamic>;
+    final data = doc.data();
     final userId = data['userId'] as String;
 
     // Fetch user data from users collection

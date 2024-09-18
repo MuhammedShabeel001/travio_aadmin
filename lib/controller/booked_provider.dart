@@ -25,7 +25,6 @@ class BookedPackageProvider with ChangeNotifier {
       notifyListeners();
     } catch (error) {
       // Handle errors here
-      print('Error fetching booked users: $error');
     }
   }
 }

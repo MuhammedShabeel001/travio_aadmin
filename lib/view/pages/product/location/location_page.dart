@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:travio_admin/controller/place_provider.dart';
 import 'package:travio_admin/view/pages/product/location/add_location_page.dart';
 
@@ -44,7 +43,7 @@ class LocationPage extends StatelessWidget {
                   if (placeProvider.filteredPlaces.isEmpty) {
                     return Center(
                       child: SvgPicture.asset('assets/icons/empty.svg'),
-                    );;
+                    );
                   } else {
                     return ListView.builder(
                       itemCount: placeProvider.filteredPlaces.length,

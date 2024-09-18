@@ -9,7 +9,7 @@ import 'package:travio_admin/model/package_model.dart';
 class PackageInfoWidget extends StatelessWidget {
   final TripPackageModel tripPackage;
 
-  const PackageInfoWidget({Key? key, required this.tripPackage}) : super(key: key);
+  const PackageInfoWidget({super.key, required this.tripPackage});
 
   Widget _buildEditableText(BuildContext context, String field, TextStyle style) {
     return Consumer<TripPackageProvider>(

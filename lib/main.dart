@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:travio_admin/controller/booked_provider.dart';
-import 'package:travio_admin/controller/edit_provider.dart';
+// import 'package:travio_admin/controller/edit_provider.dart';
 import 'package:travio_admin/controller/package_provider.dart';
 import 'package:travio_admin/controller/place_provider.dart';
 import 'package:travio_admin/controller/review_provider.dart';

@@ -121,14 +121,14 @@ class DashbordPage extends StatelessWidget {
             }
           },
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
+        const Padding(
+          padding: EdgeInsets.all(8.0),
           child: Text('Reecently added',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600),),
         ),
-        Divider(),
+        const Divider(),
         Flexible(
           child: SizedBox( 
             // color: Colors.green,
@@ -136,7 +136,7 @@ class DashbordPage extends StatelessWidget {
             child: Consumer<TripPackageProvider>(
               builder: (context, provider, child) {
                 if (provider.package.isEmpty) {
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(),
                   );
                 }
@@ -144,7 +144,6 @@ class DashbordPage extends StatelessWidget {
                 return ListView.builder(
                   itemCount: provider.package.length,
                   itemBuilder: (context, index) {
-                    final package = provider.package[index];
                     return TripPackageCard(
                       height: 150,
                         tripPackage: packageProvider.filteredPackages[index]);

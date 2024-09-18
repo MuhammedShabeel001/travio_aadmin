@@ -93,8 +93,8 @@ class TripPackageDetailsPage extends StatelessWidget {
                             tripPackageProvider.countryController.clear();
                           },
                           hideOnEmpty: true,
-                          noItemsFoundBuilder: (context) => Padding(
-                            padding: const EdgeInsets.all(8.0),
+                          noItemsFoundBuilder: (context) => const Padding(
+                            padding: EdgeInsets.all(8.0),
                             child: Text(
                               'No Countries Found',
                               style:

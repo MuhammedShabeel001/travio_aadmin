@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:io';
@@ -37,7 +36,6 @@ Future<void> updatePackageField(String field, dynamic value) async {
       
       BotToast.showText(text: 'Package updated successfully');
     } catch (e) {
-      print('Error updating package: $e');
       BotToast.showText(text: 'Error updating package');
     }
   }

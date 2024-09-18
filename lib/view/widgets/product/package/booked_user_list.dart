@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +8,7 @@ import '../../../../model/package_model.dart';
 class UsersTab extends StatelessWidget {
   final TripPackageModel tripPackage;
 
-  const UsersTab({Key? key, required this.tripPackage}) : super(key: key);
+  const UsersTab({super.key, required this.tripPackage});
 
   @override
   Widget build(BuildContext context) {
@@ -48,8 +47,11 @@ class UsersTab extends StatelessWidget {
               itemBuilder: (context, index) {
                 final user = bookedUsers[index];
                 return ListTile(
+                  leading: const CircleAvatar(
+                  backgroundImage: AssetImage('assets/image/default_pfpf.jpg'),
+                ),
                   title: Text(user['name'] ?? 'Unknown'),
-                  subtitle: Text(user['email'] ?? 'No Email'),
+                  subtitle: Text(user['phonenumber'].toString()),
                   // Add other user details here as needed
                 );
               },

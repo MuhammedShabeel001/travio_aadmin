@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'review_model.dart'; // Import your ReviewModel
 
 class TripPackageModel {

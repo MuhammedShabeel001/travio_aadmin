@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -7,7 +6,6 @@ import '../../../../controller/package_provider.dart';
 // / import '../../../../controller/trip_package_provider.dart';
 import '../../../../model/package_model.dart';
 import '../../../pages/product/package/package_detail_page.dart';
-import '../../global/delete_dialog.dart';
 // import '../../../../model/trip_package_model.dart';
 // import '../../../pages/trip_package/trip_package_detail_page.dart';
 

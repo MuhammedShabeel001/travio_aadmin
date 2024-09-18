@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../../../../controller/place_provider.dart';
 import '../../../../model/place_model.dart';
 import '../../../pages/product/location/location_detail_page.dart';
 
@@ -116,12 +114,12 @@ class DetailCard extends StatelessWidget {
                         // Add any other detail here (e.g., ratings, price)
                         const Row(
                           children: [
-                            const Icon(Icons.star, color: Colors.yellow, size: 18),
-                            const SizedBox(width: 4),
+                            Icon(Icons.star, color: Colors.yellow, size: 18),
+                            SizedBox(width: 4),
                             Text(
                               'sdjf',
                               // '${place.rating}/5',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                               ),
