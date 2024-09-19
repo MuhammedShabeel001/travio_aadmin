@@ -135,18 +135,19 @@ class TripPackagePlanningPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
-              onPressed:() {
-if (tripPackageProvider.formKey.currentState?.validate() ?? false) {
-   if (tripPackageProvider.images.isEmpty){
+              onPressed: () {
+                if (tripPackageProvider.formKey.currentState?.validate() ??
+                    false) {
+                  if (tripPackageProvider.images.isEmpty) {
                     BotToast.showText(text: 'Please select at least one image');
 
                     return;
                   }
-}
+                }
 
-                      tripPackageProvider.submitForm(context);
-                      // Navigator.pop(context);
-                    },
+                tripPackageProvider.submitForm(context);
+                // Navigator.pop(context);
+              },
               style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orangeAccent,
                   minimumSize: const Size(double.infinity, 50),

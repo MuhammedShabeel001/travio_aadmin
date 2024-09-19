@@ -6,10 +6,6 @@ import '../../../controller/user_provider.dart';
 import '../../widgets/global/search_bar.dart';
 import '../../widgets/global/t_app_bar.dart';
 import '../../widgets/manage/user_tile.dart';
-// import 'package:travio_admin/controller/user_provider.dart';
-// import 'package:travio_admin/view/widgets/global/search_bar.dart';
-// import 'package:travio_admin/view/widgets/global/t_app_bar.dart';
-// import 'package:travio_admin/view/widgets/manage/user_tile.dart';/
 
 class UsersPage extends StatelessWidget {
   const UsersPage({super.key});
@@ -18,7 +14,6 @@ class UsersPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
 
-    // Fetch users when the widget is built for the first time
     WidgetsBinding.instance.addPostFrameCallback((_) {
       userProvider.fetchUsers();
     });
@@ -28,7 +23,6 @@ class UsersPage extends StatelessWidget {
       appBar: tAppBar('Users'),
       body: Column(
         children: [
-          // Search bar
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: TSearchBar(
@@ -39,19 +33,19 @@ class UsersPage extends StatelessWidget {
               },
             ),
           ),
-          // User list
           Expanded(
             child: Consumer<UserProvider>(
               builder: (context, userProvider, child) {
                 if (userProvider.filteredUsers.isEmpty) {
                   return ListView.builder(
-                    itemCount: 5, // Number of shimmer placeholders
+                    itemCount: 5,
                     itemBuilder: (context, index) {
                       return Shimmer.fromColors(
                         baseColor: Colors.grey[300]!,
                         highlightColor: Colors.grey[100]!,
                         child: Card(
-                          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 15),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),

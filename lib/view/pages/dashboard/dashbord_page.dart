@@ -21,7 +21,6 @@ class DashbordPage extends StatelessWidget {
     final placeProvider = Provider.of<PlaceProvider>(context);
     final packageProvider = Provider.of<TripPackageProvider>(context);
 
-    // Fetch users when the widget is built for the first time
     WidgetsBinding.instance.addPostFrameCallback((_) {
       userProvider.fetchUsers();
       placeProvider.fetchAllLocations();
@@ -31,9 +30,7 @@ class DashbordPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: tAppBar('Dashbord'),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+      body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         SizedBox(
           height: 220,
           child: Row(
@@ -126,12 +123,14 @@ class DashbordPage extends StatelessWidget {
         ),
         const Padding(
           padding: EdgeInsets.all(8.0),
-          child: Text('Reecently added',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600),),
+          child: Text(
+            'Reecently added',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+          ),
         ),
         const Divider(),
         Flexible(
-          child: SizedBox( 
-            // color: Colors.green,
+          child: SizedBox(
             height: double.infinity,
             child: Consumer<TripPackageProvider>(
               builder: (context, provider, child) {
@@ -145,7 +144,7 @@ class DashbordPage extends StatelessWidget {
                   itemCount: provider.package.length,
                   itemBuilder: (context, index) {
                     return TripPackageCard(
-                      height: 150,
+                        height: 150,
                         tripPackage: packageProvider.filteredPackages[index]);
                   },
                 );
@@ -154,10 +153,6 @@ class DashbordPage extends StatelessWidget {
           ),
         )
       ]),
-//         floatingActionButton: FloatingActionButton.small(onPressed: (){
-// // BotToast.showCustomNotification(toastBuilder: toastBuilder);
-
-//         }),
     );
   }
 }

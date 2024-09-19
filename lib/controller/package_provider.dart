@@ -8,38 +8,131 @@ import 'dart:io';
 import 'package:travio_admin/model/package_model.dart';
 import '../utils/consts/constants.dart';
 
+/// Provider for managing trip package data and operations.
 class TripPackageProvider with ChangeNotifier {
-
-  // final FirebaseFirestore _db = FirebaseFirestore.instance;
   TripPackageModel? _currentPackage;
-
   TripPackageModel? get currentPackage => _currentPackage;
 
+  // Firebase Firestore instance
+  final FirebaseFirestore db = FirebaseFirestore.instance;
+
+  // Form and controllers
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TextEditingController searchController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController daysController = TextEditingController();
+  TextEditingController totalDaysController = TextEditingController();
+  TextEditingController nightsController = TextEditingController();
+  TextEditingController realPriceController = TextEditingController();
+  TextEditingController offerPriceController = TextEditingController();
+  final TextEditingController _newActivityController = TextEditingController();
+  TextEditingController countryController = TextEditingController();
+
+  // State variables
+  int totalDays = 0;
+  int _currentIndex = 0;
+  List<TextEditingController> dailyPlanningControllers = [];
+  final List<File> _images = [];
+  List<String> selectedActivities = [];
+  List<String> selectedTransportOptions = [];
+  bool _isSubmitting = false;
+  final List<String> _uploadedImagesUrls = [];
+  List<String> selectedCountries = [];
+
+  List<String> availableCountries = countries;
+  List<TripPackageModel> _package = [];
+  List<TripPackageModel> get package => _package;
+  String _searchQuery = '';
+
+  // Activities and transport options
+  final List<String> _availableActivities = [
+    'Hiking',
+    'Camping',
+    'Beach',
+    'Cycling',
+    'Sightseeing',
+    'Adventure Sports',
+    'Wildlife Safari',
+    'Skiing',
+    'Cultural Experience',
+    'Culinary Tours',
+    'Water Sports',
+    'Wellness and Spa',
+    'Photograph',
+    'Road Trips',
+    'Cruise',
+    'Historical Tours',
+    'Luxury Travel',
+    'Festival and Events',
+    'Eco-Tourism',
+    'Family-Friendly',
+    'Volunteer Travel',
+    'Shopping',
+    'Religious and Spiritual Tour',
+    'Nightlife and Entertainment'
+  ];
+
+  final List<String> _transportOptions = [
+    'Flight',
+    'Train',
+    'Bus',
+    'Ship',
+    'Yacht',
+    'Car',
+    'Taxi',
+    'Bicycle',
+    'Motorbike',
+    'Scooter',
+    'Walking',
+    'Tram',
+    'Metro',
+    'Ferry',
+    'Helicopter',
+    'Campervan',
+    'RV',
+    'Rickshaw',
+    'Tuk-Tuk',
+    'Horseback',
+    'Cable Car',
+    'Snowmobile',
+  ];
+
+  // Getters
+  int get currentIndex => _currentIndex;
+  TextEditingController get newActivityController => _newActivityController;
+  List<String> get availableActivities => _availableActivities;
+  List<String> get transportOptions => _transportOptions;
+  GlobalKey<FormState> get formKey => _formKey;
+  bool get isSubmitting => _isSubmitting;
+  List<File> get images => _images;
+
+  // Update current package
   void setCurrentPackage(TripPackageModel package) {
     _currentPackage = package;
     notifyListeners();
   }
 
-Future<void> updatePackageField(String field, dynamic value) async {
+  // Update a specific field in the current package
+  Future<void> updatePackageField(String field, dynamic value) async {
     if (_currentPackage == null) return;
 
     try {
-      await db.collection('trip_packages').doc(_currentPackage!.id).update({field: value});
-      
-      // Update the current package
+      await db
+          .collection('trip_packages')
+          .doc(_currentPackage!.id)
+          .update({field: value});
       Map<String, dynamic> updatedData = _currentPackage!.toMap();
       updatedData[field] = value;
       _currentPackage = TripPackageModel.fromMap(updatedData);
-      
-      // Notify listeners immediately after updating the current package
       notifyListeners();
-      
       BotToast.showText(text: 'Package updated successfully');
     } catch (e) {
       BotToast.showText(text: 'Error updating package');
     }
   }
 
+  // Show dialog to edit a field
   Future<void> showEditDialog(BuildContext context, String field) async {
     if (_currentPackage == null) return;
 
@@ -68,69 +161,13 @@ Future<void> updatePackageField(String field, dynamic value) async {
       },
     );
 
-    if (newValue != null && newValue != _currentPackage!.getFieldValue(field).toString()) {
+    if (newValue != null &&
+        newValue != _currentPackage!.getFieldValue(field).toString()) {
       await updatePackageField(field, newValue);
     }
   }
-  
-  final FirebaseFirestore db = FirebaseFirestore.instance;
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController searchController = TextEditingController();
-  TextEditingController nameController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
-  TextEditingController daysController = TextEditingController();
-  TextEditingController totalDaysController = TextEditingController();
-  TextEditingController nightsController = TextEditingController();
-  TextEditingController realPriceController = TextEditingController();
-  TextEditingController offerPriceController = TextEditingController();
-  final TextEditingController _newActivityController = TextEditingController();
-  TextEditingController countryController = TextEditingController();
-
-  int totalDays = 0;
-  List<TextEditingController> dailyPlanningControllers = [];
-  final List<File> _images = [];
-
-  List<String> selectedActivities = [];
-  List<String> selectedTransportOptions = [];
-  bool _isSubmitting = false;
-  final List<String> _uploadedImagesUrls = [];
-  List<String> selectedCountries = [];
-
-  List<String> availableCountries = countries;
-
-  int _currentIndex = 0;
-  int get currentIndex => _currentIndex;
-
-  TextEditingController get newActivityController => _newActivityController;
-  List<String> get availableActivities => _availableActivities;
-  List<String> get transportOptions => _transportOptions;
-  GlobalKey<FormState> get formKey => _formKey;
-  bool get isSubmitting => _isSubmitting;
-  List<File> get images => _images;
-
-  List<TripPackageModel> _package = [];
-  List<TripPackageModel> get package => _package;
-
-  String _searchQuery = '';
-
-  final List<String> _availableActivities = [
-    'Hiking', 'Camping', 'Beach', 'Cycling', 'Sightseeing',
-    'Adventure Sports', 'Wildlife Safari', 'Skiing',
-    'Cultural Experience', 'Culinary Tours', 'Water Sports',
-    'Wellness and Spa', 'Photograph', 'Road Trips', 'Cruise',
-    'Historical Tours', 'Luxury Travel', 'Festival and Events',
-    'Eco-Tourism', 'Family-Friendly', 'Volunteer Travel',
-    'Shopping', 'Religious and Spiritual Tour', 'Nightlife and Entertainment'
-  ];
-
-  final List<String> _transportOptions = [
-    'Flight', 'Train', 'Bus', 'Ship', 'Yacht', 'Car', 'Taxi',
-    'Bicycle', 'Motorbike', 'Scooter', 'Walking', 'Tram',
-    'Metro', 'Ferry', 'Helicopter', 'Campervan', 'RV',
-    'Rickshaw', 'Tuk-Tuk', 'Horseback', 'Cable Car', 'Snowmobile',
-  ];
-
+  // Add a country to the list of available countries
   void addCountry(String country) {
     if (!countries.contains(country)) {
       countries.add(country);
@@ -138,6 +175,7 @@ Future<void> updatePackageField(String field, dynamic value) async {
     }
   }
 
+  // Update total days and generate controllers for daily planning
   void updateTotalDays(int days) {
     totalDays = days;
     dailyPlanningControllers =
@@ -145,6 +183,7 @@ Future<void> updatePackageField(String field, dynamic value) async {
     notifyListeners();
   }
 
+  // Toggle country selection
   void toggleCountrySelection(String country) {
     if (selectedCountries.contains(country)) {
       selectedCountries.remove(country);
@@ -154,6 +193,7 @@ Future<void> updatePackageField(String field, dynamic value) async {
     notifyListeners();
   }
 
+  // Pick images from file picker
   Future<void> pickImages() async {
     final result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
@@ -165,11 +205,13 @@ Future<void> updatePackageField(String field, dynamic value) async {
     }
   }
 
+  // Remove an image from the list
   void removeImage(int index) {
     images.removeAt(index);
     notifyListeners();
   }
 
+  // Add an activity to the list of available activities
   void addActivity(String activity) {
     if (!_availableActivities.contains(activity)) {
       _availableActivities.add(activity);
@@ -177,6 +219,7 @@ Future<void> updatePackageField(String field, dynamic value) async {
     }
   }
 
+  // Toggle the selection of an activity
   void toggleActivity(String activity) {
     if (selectedActivities.contains(activity)) {
       selectedActivities.remove(activity);
@@ -186,6 +229,7 @@ Future<void> updatePackageField(String field, dynamic value) async {
     notifyListeners();
   }
 
+  // Toggle the selection of a transport option
   void toggleTransport(String transport) {
     if (selectedTransportOptions.contains(transport)) {
       selectedTransportOptions.remove(transport);
@@ -195,11 +239,13 @@ Future<void> updatePackageField(String field, dynamic value) async {
     notifyListeners();
   }
 
+  // Update the search query for filtering packages
   void updateSearchQuery(String query) {
     _searchQuery = query;
     notifyListeners();
   }
 
+  // Get filtered packages based on the search query
   List<TripPackageModel> get filteredPackages {
     if (_searchQuery.isEmpty) {
       return _package;
@@ -210,23 +256,21 @@ Future<void> updatePackageField(String field, dynamic value) async {
         final activitiesLower = package.activities
             .map((activity) => activity.toLowerCase())
             .toList();
-
         return nameLower.contains(searchLower) ||
             activitiesLower.any((activity) => activity.contains(searchLower));
       }).toList();
     }
   }
 
+  // Fetch all packages from Firestore
   Future<void> fetchAllPackages() async {
     try {
       QuerySnapshot tripPackageSnapshot =
           await db.collection('trip_packages').get();
-
       _package = tripPackageSnapshot.docs
           .map((doc) =>
               TripPackageModel.fromMap(doc.data() as Map<String, dynamic>))
           .toList();
-
       notifyListeners();
     } catch (e) {
       log('Error fetching package data: $e');
@@ -234,18 +278,18 @@ Future<void> updatePackageField(String field, dynamic value) async {
     }
   }
 
+  // Fetch the last added packages from Firestore
   Future<void> fetchLastAddedPackages() async {
     try {
       QuerySnapshot querySnapshot = await db
           .collection('trip_packages')
-          .orderBy('created_at', descending: true) // Assuming you have a 'created_at' field
+          .orderBy('created_at', descending: true)
           .limit(3)
           .get();
-
       _package = querySnapshot.docs
-          .map((doc) => TripPackageModel.fromMap(doc.data() as Map<String, dynamic>))
+          .map((doc) =>
+              TripPackageModel.fromMap(doc.data() as Map<String, dynamic>))
           .toList();
-
       notifyListeners();
     } catch (e) {
       log('Error fetching last added packages: $e');
@@ -253,11 +297,13 @@ Future<void> updatePackageField(String field, dynamic value) async {
     }
   }
 
+  // Update the index of the currently selected package
   void updateIndex(int index) {
     _currentIndex = index;
     notifyListeners();
   }
 
+  // Upload images to Firebase Storage
   Future<void> _uploadImages() async {
     for (var image in _images) {
       final fileName = DateTime.now().millisecondsSinceEpoch.toString();
@@ -272,6 +318,7 @@ Future<void> updatePackageField(String field, dynamic value) async {
     }
   }
 
+  // Submit the form and add a new package
   Future<void> submitForm(BuildContext context) async {
     _isSubmitting = true;
     notifyListeners();
@@ -279,9 +326,7 @@ Future<void> updatePackageField(String field, dynamic value) async {
     if (formKey.currentState?.validate() ?? false) {
       try {
         _uploadedImagesUrls.clear();
-        
         await _uploadImages();
-
         DocumentReference docRef =
             FirebaseFirestore.instance.collection('trip_packages').doc();
         String packageId = docRef.id;
@@ -296,7 +341,8 @@ Future<void> updatePackageField(String field, dynamic value) async {
           'name': nameController.text,
           'description': descriptionController.text,
           'images': _uploadedImagesUrls,
-          'daily_plan': dailyPlanMap.map((key, value) => MapEntry(key.toString(), value)),
+          'daily_plan':
+              dailyPlanMap.map((key, value) => MapEntry(key.toString(), value)),
           'real_price': double.tryParse(realPriceController.text),
           'offer_price': double.tryParse(offerPriceController.text),
           'activities': selectedActivities,
@@ -334,6 +380,7 @@ Future<void> updatePackageField(String field, dynamic value) async {
     }
   }
 
+  // Delete a package by its ID
   Future<void> deletePackage(String packageId) async {
     try {
       await db.collection('trip_packages').doc(packageId).delete();
@@ -346,6 +393,7 @@ Future<void> updatePackageField(String field, dynamic value) async {
     }
   }
 
+  // Reset the form and internal state
   void _resetForm() {
     nameController.clear();
     countryController.clear();

@@ -6,8 +6,7 @@ class ReviewModel {
   final String reviewText;
   final double rating;
   final DateTime timestamp;
-  final String userName; // New field for user's name
-  // final String profileImageUrl; // New field for user's profile image
+  final String userName;
 
   ReviewModel({
     required this.id,
@@ -15,8 +14,7 @@ class ReviewModel {
     required this.reviewText,
     required this.rating,
     required this.timestamp,
-    required this.userName, // Initialize this
-    // required this.profileImageUrl, // Initialize this
+    required this.userName,
   });
 
   factory ReviewModel.fromMap(Map<String, dynamic> map, String id) {
@@ -26,8 +24,7 @@ class ReviewModel {
       reviewText: map['reviewText'] as String,
       rating: (map['rating'] as num).toDouble(),
       timestamp: (map['timestamp'] as Timestamp).toDate(),
-      userName: map['userName'] as String, // Fetch user's name
-      // profileImageUrl: map['profileImageUrl'] as String, // Fetch user's profile image URL
+      userName: map['userName'] as String,
     );
   }
 
@@ -37,8 +34,7 @@ class ReviewModel {
       'reviewText': reviewText,
       'rating': rating,
       'timestamp': Timestamp.fromDate(timestamp),
-      'userName': userName, // Include user's name
-      // 'profileImageUrl': profileImageUrl, // Include user's profile image URL
+      'userName': userName,
     };
   }
 }

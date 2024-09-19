@@ -50,7 +50,8 @@ class UserProvider with ChangeNotifier {
           'image': doc['pronouns'] ?? '', // Use pronouns field
           'name': doc['name'] ?? '',
           'email': doc['email'] ?? '',
-        }.map((key, value) => MapEntry(key, value.toString())); // Casting to String
+        }.map((key, value) =>
+            MapEntry(key, value.toString())); // Casting to String
       }).toList();
       log('$snapshot');
       _dataFetched = true; // Data has been fetched
